@@ -4182,7 +4182,15 @@
       <DataType>varchar(20)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="966" parent="340" name="PRIMARY">
+    <column id="966" parent="340" name="createtime">
+      <Position>6</Position>
+      <Comment>注册日期</Comment>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="967" parent="340" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>person_id</ColNames>
       <Primary>1</Primary>

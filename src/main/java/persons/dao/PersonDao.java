@@ -13,7 +13,8 @@ import java.util.Date;
 public class PersonDao {
     private String personId;//用户ID
     private String personName;//用户昵称
-    private int personAge;//用户年龄
+    private String personAge;//用户年龄
     private String personSex;//用户性别
-    private Date personBirthday;//用户生日
+    private String personBirthday;//用户生日
+    private Date createTime;//注册时间
 }
