@@ -12,6 +12,8 @@ comment '用户性别',
 person_birthday varchar(20)                         null
 comment '用户生日',
 createtime      timestamp default CURRENT_TIMESTAMP not null
-comment '注册日期'
+comment '注册日期',
+person_password varchar(60)                         not null
+comment '用户密码'
 );
 
