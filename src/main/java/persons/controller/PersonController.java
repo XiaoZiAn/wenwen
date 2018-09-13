@@ -1,6 +1,8 @@
 package persons.controller;
 
 import System.service.NewBillNoService;
+import net.sf.json.JSON;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,10 @@ public class PersonController {
     PersonMapper personMapper;
     @Autowired
     NewBillNoService newBillNoService;
+    @Autowired
+    BCrypt BCrypt;
 
-    private static Logger logger = LoggerFactory
-            .getLogger(PersonController.class);
+    private static Logger logger = LoggerFactory.getLogger(PersonController.class);
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public void addPerson(@RequestBody Map<String, String> param) throws Exception {
         PersonDao person = new PersonDao();
@@ -37,10 +40,17 @@ public class PersonController {
         person.setPersonName(param.get("name"));
         person.setPersonAge(param.get("age"));
         person.setPersonBirthday(param.get("birthday"));
+        String passworded = BCrypt.hashpw(param.get("password"), BCrypt.gensalt());
+        person.setPersonPassword(passworded);
         int cnt = personMapper.insert(person);
         if(cnt == 0){
             logger.info("personId:{}注册失败",personId);
         }
+    }
+
+    @RequestMapping(path = "/logon",method = RequestMethod.POST)
+    public void logon(@RequestBody JSON param) throws  Exception {
+
     }
 
     @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)

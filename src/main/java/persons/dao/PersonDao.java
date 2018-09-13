@@ -17,5 +17,6 @@ public class PersonDao {
     private String personAge;//用户年龄
     private String personSex;//用户性别
     private String personBirthday;//用户生日
+    private String personPassword;//用户密码
     private Date createTime;//注册时间
 }
