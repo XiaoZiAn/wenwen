@@ -10,6 +10,7 @@ import java.util.Date;
  * @since
  */
 @Data
+@SuppressWarnings("serial")
 public class PersonDao {
     private String personId;//用户ID
     private String personName;//用户昵称

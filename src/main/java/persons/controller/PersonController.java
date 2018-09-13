@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import persons.dao.PersonDao;
 import persons.mapper.PersonMapper;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,4 +43,10 @@ public class PersonController {
         }
     }
 
+    @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
+    public List<PersonDao> selectPersons(@RequestBody String json) throws Exception {
+        List<PersonDao> persons = personMapper.selectAll();
+        logger.info("persons:{}",persons);
+        return persons;
+    }
 }
