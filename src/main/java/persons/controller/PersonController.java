@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import persons.dao.PersonDao;
 import persons.mapper.PersonMapper;
-
+import com.alibaba.fastjson.JSONObject;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +49,12 @@ public class PersonController {
     }
 
     @RequestMapping(path = "/logon",method = RequestMethod.POST)
-    public void logon(@RequestBody JSON param) throws  Exception {
-
+    public void logon(@RequestBody JSONObject paramJson) throws  Exception {
+        String hashed = null;
+        if (BCrypt.checkpw(paramJson.getString("password"), hashed))
+            System.out.println("It matches");
+        else
+            System.out.println("It does not match");
     }
 
     @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
