@@ -1,41 +1,66 @@
 package System.dao;
 
 import System.code.ResultCode;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * @author xiaoxinga
  * @date 2018/9/10 15:58
  * @since
  */
-public class Result {
+@SuppressWarnings("serial")
+@NoArgsConstructor
+public class Result<T> implements Serializable {
     private String rsMsg;
     private String rsCode;
-    public void setRsCode (String rsCode){
+    private T data;
+    public Result(String rsCode, String rsMsg) {
+        this(rsCode, rsMsg, null);
+    }
+    public Result(String rsCode, String rsMsg, T data) {
+        this.data = data;
         this.rsCode = rsCode;
+        this.rsMsg = rsMsg;
+    }
+    public Result(ResultEnums resultEnums) {
+        this(resultEnums.rsCode, resultEnums.rsMsg, null);
     }
 
-    public String getRsCode (){
-        return rsCode;
+    public void setResultEnums(ResultEnums resultEnums) {
+        this.rsCode = resultEnums.rsCode;
+        this.rsMsg = resultEnums.rsMsg;
     }
 
-    public void setRsMsg(){
-        this.rsMsg = ResultMsg.getResultByCode(rsCode).rsMsg;
+    public void setResultEnums(ResultEnums resultEnums, T data) {
+        this.rsCode = resultEnums.rsCode;
+        this.rsMsg = resultEnums.rsMsg;
+        this.data = data;
     }
 
     public String getRsMsg(){
         return rsMsg;
     }
-    public enum ResultMsg {
-        WL_ERROR("网络错误", "1000");
+
+    public String getRsCode(){
+        return rsCode;
+    }
+    public enum ResultEnums {
+        SUCCESS("操作成功","00000"),
+        SIGIN_SUCCESS("注册成功","0000"),
+        SIGIN_ERROR("注册失败","0001"),
+        LOGON_SUCCESS("登录成功","1000"),
+        LOGON_ERROR("登录失败", "1001");
         public final String rsMsg;
         public final String rsCode;
 
-        private ResultMsg(String rsMsg, String rsCode) {
+        private ResultEnums(String rsMsg, String rsCode) {
             this.rsMsg = rsMsg;
             this.rsCode = rsCode;
         }
-        public static ResultMsg getResultByCode(String rsCode) {
-            for (ResultMsg resultCode : ResultMsg.values()) {
+        public static ResultEnums getResultEnumsByCode(String rsCode) {
+            for (ResultEnums resultCode : ResultEnums.values()) {
                 if (resultCode.rsCode.equals(rsCode)) {
                     return resultCode;
                 }

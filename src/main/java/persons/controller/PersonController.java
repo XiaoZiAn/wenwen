@@ -1,7 +1,7 @@
 package persons.controller;
 
+import System.dao.Result;
 import System.service.NewBillNoService;
-import net.sf.json.JSON;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,8 @@ public class PersonController {
 
     private static Logger logger = LoggerFactory.getLogger(PersonController.class);
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
-    public void addPerson(@RequestBody Map<String, String> param) throws Exception {
+    public Result addPerson(@RequestBody Map<String, String> param) throws Exception {
+        Result result = new Result(Result.ResultEnums.SIGIN_ERROR);
         PersonDao person = new PersonDao();
         String personId = String.valueOf(newBillNoService.createNewBillNo());
         person.setPersonId(personId);
@@ -45,21 +46,30 @@ public class PersonController {
         int cnt = personMapper.insert(person);
         if(cnt == 0){
             logger.info("personId:{}注册失败",personId);
+            return result;
         }
+        result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
+        return result;
     }
 
     @RequestMapping(path = "/logon",method = RequestMethod.POST)
-    public void logon(@RequestBody JSONObject paramJson) throws  Exception {
-        String hashed = null;
-        if (BCrypt.checkpw(paramJson.getString("password"), hashed))
-            System.out.println("It matches");
+    public Result<PersonDao> logon(@RequestBody JSONObject paramJson) throws  Exception {
+        Result<PersonDao> result = new Result<PersonDao>(Result.ResultEnums.LOGON_ERROR);
+        String personId = paramJson.getString("personId");
+        String hashed = personMapper.getPasswordById(personId);
+        if (BCrypt.checkpw(paramJson.getString("password"), hashed)){
+            PersonDao personDao = personMapper.selectByPersonId(personId);
+            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS,personDao);
+            return result;
+        }
         else
-            System.out.println("It does not match");
+            return result;
     }
 
     @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
     public List<PersonDao> selectPersons(@RequestBody String json) throws Exception {
         List<PersonDao> persons = personMapper.selectAll();
+        System.out.println("success");
         logger.info("persons:{}",persons);
         return persons;
     }

@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface PersonMapper {
     int insert(@Param("person") PersonDao person);
-    PersonDao select(@Param("person") PersonDao person);
+    PersonDao selectByPersonId(@Param("personId") String personId);
     List<PersonDao> selectAll();
+    String getPasswordById(@Param("personId") String personId);
 }

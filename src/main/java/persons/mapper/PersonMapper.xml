@@ -15,29 +15,18 @@
 			#{personSex, jdbcType=VARCHAR},
 			#{personBirthday, jdbcType=VARCHAR})
     </insert>
-    <select id="select" resultType="persons.dao.PersonDao">
+    <select id="selectByPersonId" resultType="persons.dao.PersonDao">
         select <include refid="Person_List" />
         from person p
-        <!--where-->
-          <!--<if test="personId != null and personId != ''.toString()">-->
-              <!--p.person_id = #{personId, jdbcType=VARCHAR}-->
-          <!--</if>-->
-          <!--<if test="personName !=null and personName != ''.toString()">-->
-              <!--and p.person_name = #{personName, jdbcType=VARCHAR}-->
-          <!--</if>-->
-          <!--<if test="personAge !=null and personAge != ''.toString()">-->
-            <!--and p.person_age = #{personAge, jdbcType=int}-->
-          <!--</if>-->
-          <!--<if test="personSex !=null and personSex != ''.toString()">-->
-            <!--and p.person_sex = #{personSex, jdbcType=VARCHAR}-->
-          <!--</if>-->
-          <!--<if test="personBirthday !=null and personBirthday != ''.toString()">-->
-            <!--and p.person_birthday = #{personBirthday, jdbcType=VARCHAR}-->
-          <!--</if>-->
+        where p.person_id = #{personId, jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultType="persons.dao.PersonDao">
         select <include refid="Person_List"/>
         from person
+    </select>
+
+    <select id="getPasswordById" resultType="String">
+        select person_password as password from person where person_id = #{personId,jdbcType=VARCHAR}
     </select>
 
     <sql id="Person_List">
