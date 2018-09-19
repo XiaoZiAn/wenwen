@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import persons.dao.PersonDao;
-import persons.mapper.PersonMapper;
+import persons.model.Person;
 import com.alibaba.fastjson.JSONObject;
+import persons.service.PersonService;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 @RequestMapping(path = "/person")
 public class PersonController {
     @Autowired
-    PersonMapper personMapper;
+    PersonService personService;
     @Autowired
     NewBillNoService newBillNoService;
     @Autowired
@@ -35,15 +36,14 @@ public class PersonController {
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public Result addPerson(@RequestBody Map<String, String> param) throws Exception {
         Result result = new Result(Result.ResultEnums.SIGIN_ERROR);
-        PersonDao person = new PersonDao();
+        Person person = new Person();
         String personId = String.valueOf(newBillNoService.createNewBillNo());
         person.setPersonId(personId);
         person.setPersonName(param.get("name"));
-        person.setPersonAge(param.get("age"));
         person.setPersonBirthday(param.get("birthday"));
         String passworded = BCrypt.hashpw(param.get("password"), BCrypt.gensalt());
         person.setPersonPassword(passworded);
-        int cnt = personMapper.insert(person);
+        int cnt = personService.insert(person);
         if(cnt == 0){
             logger.info("personId:{}注册失败",personId);
             return result;
@@ -53,13 +53,13 @@ public class PersonController {
     }
 
     @RequestMapping(path = "/logon",method = RequestMethod.POST)
-    public Result<PersonDao> logon(@RequestBody JSONObject paramJson) throws  Exception {
-        Result<PersonDao> result = new Result<PersonDao>(Result.ResultEnums.LOGON_ERROR);
+    public Result<Person> logon(@RequestBody JSONObject paramJson) throws  Exception {
+        Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);
         String personId = paramJson.getString("personId");
-        String hashed = personMapper.getPasswordById(personId);
+        String hashed = personService.getPasswordById(personId);
         if (BCrypt.checkpw(paramJson.getString("password"), hashed)){
-            PersonDao personDao = personMapper.selectByPersonId(personId);
-            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS,personDao);
+            Person person = personService.selectByPersonId(personId);
+            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);
             return result;
         }
         else
@@ -67,8 +67,8 @@ public class PersonController {
     }
 
     @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
-    public List<PersonDao> selectPersons(@RequestBody String json) throws Exception {
-        List<PersonDao> persons = personMapper.selectAll();
+    public List<Person> selectPersons(@RequestBody String json) throws Exception {
+        List<Person> persons = personService.selectAll();
         System.out.println("success");
         logger.info("persons:{}",persons);
         return persons;

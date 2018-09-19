@@ -1,6 +1,6 @@
 package persons.mapper;
 
-import persons.dao.PersonDao;
+import persons.model.Person;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -10,8 +10,8 @@ import java.util.List;
  * @since
  */
 public interface PersonMapper {
-    int insert(@Param("person") PersonDao person);
-    PersonDao selectByPersonId(@Param("personId") String personId);
-    List<PersonDao> selectAll();
+    int insert(@Param("person") Person person);
+    Person selectByPersonId(@Param("personId") String personId);
+    List<Person> selectAll();
     String getPasswordById(@Param("personId") String personId);
 }

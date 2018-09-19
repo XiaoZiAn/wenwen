@@ -1128,38 +1128,37 @@
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="282" parent="278" name="person_age">
+    <column id="282" parent="278" name="person_sex">
       <Position>3</Position>
-      <Comment>用户年龄</Comment>
-      <DataType>int(11)|0s</DataType>
-      <DefaultExpression>&apos;0&apos;</DefaultExpression>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="283" parent="278" name="person_sex">
-      <Position>4</Position>
       <Comment>用户性别</Comment>
       <DataType>varchar(20)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="284" parent="278" name="person_birthday">
-      <Position>5</Position>
+    <column id="283" parent="278" name="person_birthday">
+      <Position>4</Position>
       <Comment>用户生日</Comment>
       <DataType>varchar(20)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="285" parent="278" name="createtime">
+    <column id="284" parent="278" name="person_email">
+      <Position>5</Position>
+      <Comment>用户邮箱</Comment>
+      <DataType>varchar(100)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="285" parent="278" name="person_password">
       <Position>6</Position>
+      <Comment>用户密码</Comment>
+      <DataType>varchar(60)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="286" parent="278" name="createtime">
+      <Position>7</Position>
       <Comment>注册日期</Comment>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="286" parent="278" name="person_password">
-      <Position>7</Position>
-      <Comment>用户密码</Comment>
-      <DataType>varchar(60)|0s</DataType>
-      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <key id="287" parent="278" name="PRIMARY">

@@ -1,9 +1,10 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import persons.dao.PersonDao;
+import persons.model.Person;
 
 import java.util.List;
 
@@ -19,7 +20,12 @@ public class testPerson {
     persons.mapper.PersonMapper personMapper;
     @Test
     public void getAll (){
-        List<PersonDao> persons =  personMapper.selectAll();
+        List<Person> persons =  personMapper.selectAll();
         System.out.println(persons);
+    }
+    public static void main(String args[]){
+        String password = "WX147822";
+        String passworded = BCrypt.hashpw(password, BCrypt.gensalt());
+        System.out.println(passworded);
     }
 }

@@ -3,46 +3,55 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!--  加载spring和mybatis的配置文件 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:ApplicationContext.xml</param-value>
+        <param-value>classpath:spring-mybatis.xml</param-value>
     </context-param>
+    <!-- 使用ContextLoaderListener初始化Spring容器 -->
+    <!--若没有指定其他参数，默认查找的配置文件位置是：/WEB-INF/applicationContext.xml  -->
     <listener>
+        <description>Spring容器加载监听器</description>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- 使用Filter进行编码转换 -->
+    <!-- 配置springmvc核心控制器 -->
+    <!-- spring MVC servlet -->
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <description>spring MVC 配置文件路径</description>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <!-- 启动动优先级，越小越早加载 -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- Servlet访问的路径映射，所有的访问都必须经过调度用的前置控制器 -->
+    <servlet-mapping>
+        <servlet-name>SpringMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 编码过滤器 -->
     <filter>
+        <description>字符集过滤器</description>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
+            <description>字符集编码</description>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
         </init-param>
-        <init-param>
-            <param-name>forceEncoding</param-name>
-            <param-value>true</param-value>
-        </init-param>
     </filter>
+    <!-- 路径映射 -->
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern> <!-- 不要使用/，使用/*代替才能够真正起作用，还需要配置在ContextLoaderListener后才能起作用  -->
     </filter-mapping>
-    <servlet>
-        <servlet-name>springDispatcherServlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <!--配置DispatcherServlet的一个初始化参数,配置SpringMVC配置文件的位置和名称-->
-        <!--实际上也可以不通过contextConfigLocation来配置SpringMVC的配置文件,而使用默认的.
-            默认的配置文件为:/WEB-INF/<servlet-name>-servlet.xml
-        -->
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:ApplicationContext.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>springDispatcherServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
