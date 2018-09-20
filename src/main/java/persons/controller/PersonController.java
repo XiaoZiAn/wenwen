@@ -2,6 +2,7 @@ package persons.controller;
 
 import System.dao.Result;
 import System.service.NewBillNoService;
+import com.alibaba.fastjson.JSON;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,14 +35,12 @@ public class PersonController {
 
     private static Logger logger = LoggerFactory.getLogger(PersonController.class);
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
-    public Result addPerson(@RequestBody Map<String, String> param) throws Exception {
+    public Result addPerson(@RequestBody String param) throws Exception {
         Result result = new Result(Result.ResultEnums.SIGIN_ERROR);
-        Person person = new Person();
+        Person person = JSON.parseObject(param,Person.class);
         String personId = String.valueOf(newBillNoService.createNewBillNo());
         person.setPersonId(personId);
-        person.setPersonName(param.get("name"));
-        person.setPersonBirthday(param.get("birthday"));
-        String passworded = BCrypt.hashpw(param.get("password"), BCrypt.gensalt());
+        String passworded = BCrypt.hashpw(person.getPersonPassword(), BCrypt.gensalt());
         person.setPersonPassword(passworded);
         int cnt = personService.insert(person);
         if(cnt == 0){

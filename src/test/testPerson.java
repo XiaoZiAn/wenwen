@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import persons.model.Person;
+import persons.mapper.PersonMapper;
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ import java.util.List;
  * @since
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/ApplicationContext.xml")
+@ContextConfiguration("/spring-mybatis.xml")
 public class testPerson {
     @Autowired
-    persons.mapper.PersonMapper personMapper;
+    PersonMapper personMapper;
     @Test
     public void getAll (){
         List<Person> persons =  personMapper.selectAll();
