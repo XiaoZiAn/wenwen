@@ -18,7 +18,7 @@
     <!-- 配置springmvc核心控制器 -->
     <!-- spring MVC servlet -->
     <servlet>
-        <servlet-name>SpringMVC</servlet-name>
+        <servlet-name>wenwen</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <description>spring MVC 配置文件路径</description>
@@ -30,7 +30,7 @@
     </servlet>
     <!-- Servlet访问的路径映射，所有的访问都必须经过调度用的前置控制器 -->
     <servlet-mapping>
-        <servlet-name>SpringMVC</servlet-name>
+        <servlet-name>wenwen</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 

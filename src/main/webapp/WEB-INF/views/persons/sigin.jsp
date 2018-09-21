@@ -39,18 +39,24 @@
                 // var person = {personName:personName,
                 //     personEmail:personEmail,
                 //     personPassword:personPassword}; //拼装成json格式
-                var json = $("#personForm").serializeObject();
+                var person = $("#personForm").serializeObject();
                 $.ajax({
                     type:"POST",
-                    url:"/person/addPerson",
-                    data:JSON.stringify(json),
-                    contentType:"application/json",
-                    success:function(result){
-                        console.log(result);
-                        alert("注册成功");
+                    url:"/wenwen/person/addPerson",
+                    data:JSON.stringify(person),
+                    dataType:"json",
+                    contentType:"application/json;charset=utf-8",
+                    success:function(data){
+                        var jsonData = JSON.parse(data);
+                        console.log(jsonData);
+                        if (jsonData.rsCode == "0000") {//请求成功
+                            alert("注册成功");
+                        } else {
+                            alert("注册失败:"+jsonData.rsMsg);
+                        }
                     },
-                    error:function(result) {
-                        alert("注册失败："+result.getRsMsg);
+                    error:function() {
+                        alert("注册失败：网络异常！");
                     }
                 });
             });
@@ -59,7 +65,7 @@
 
 </head>
 <body>
-<form action="/person/addPerson" method="post" id="personForm">
+<form action="/wenwen/person/addPerson" method="post">
     <div class="login-item">
         <label>用户名：</label>
         <input type="text" name="personName" id="personName" placeholder="点此输入用户名">
@@ -73,8 +79,7 @@
         <input type="text" name="personEmail" id="personEmail" placeholder="点此输入邮箱">
     </div>
     <div class="login-submit">
-        <input type="hidden" name="status" value="1" id="status">
-        <input type="button" value="注册" class="dc-bt login-bt" id="submitSigin">
+        <input type="submit" value="注册" class="dc-bt login-bt">
     </div>
 </form>
 
