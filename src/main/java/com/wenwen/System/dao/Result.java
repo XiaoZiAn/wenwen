@@ -1,6 +1,5 @@
-package System.dao;
+package com.wenwen.System.dao;
 
-import System.code.ResultCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;

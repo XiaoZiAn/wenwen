@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<a href="/person/register ">Hello World!</a>
 </body>
 </html>

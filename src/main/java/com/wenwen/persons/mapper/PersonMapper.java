@@ -1,6 +1,6 @@
-package persons.mapper;
+package com.wenwen.persons.mapper;
 
-import persons.model.Person;
+import com.wenwen.persons.model.Person;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface PersonMapper {
     int insert(@Param("person") Person person);
-    Person selectByPersonId(@Param("personId") String personId);
+    Person selectByPersonName(@Param("personName") String personName);
     List<Person> selectAll();
-    String getPasswordById(@Param("personId") String personId);
+    String getPasswordByName(@Param("personName") String personName);
 }

@@ -65,7 +65,7 @@
 
 </head>
 <body>
-<form action="/wenwen/person/addPerson" method="post">
+<form action="/person/register" method="post">
     <div class="login-item">
         <label>用户名：</label>
         <input type="text" name="personName" id="personName" placeholder="点此输入用户名">

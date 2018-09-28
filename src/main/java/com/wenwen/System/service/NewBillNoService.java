@@ -1,10 +1,13 @@
-package System.service;
+package com.wenwen.System.service;
+
+import org.springframework.stereotype.Service;
 
 /**
  * @author xiaoxinga
  * @date 2018/9/10 14:59
  * @since
  */
+@Service
 public class NewBillNoService {
     /* 开始时间戳 (2018-03-04) */
     private final long twepoch = 1520148401625L;

@@ -4,8 +4,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import persons.model.Person;
-import persons.mapper.PersonMapper;
+import com.wenwen.persons.model.Person;
+import com.wenwen.persons.mapper.PersonMapper;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @since
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring-mybatis.xml")
+@ContextConfiguration("/spring/spring-mybatis.xml")
 public class testPerson {
     @Autowired
     PersonMapper personMapper;

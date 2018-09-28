@@ -1,9 +1,6 @@
-package persons.model;
+package com.wenwen.persons.model;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * @author xiaoxinga
@@ -25,5 +22,5 @@ public class Person {
 
     private String personPassword;//用户密码
 
-    private Date createTime;//注册时间
+    private String createTime;//注册时间
 }
