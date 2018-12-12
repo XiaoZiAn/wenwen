@@ -8,57 +8,54 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 1.引入属性文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
-    <!-- 2.自动扫描service包(自动注入) -->
-    <context:component-scan base-package="com.wenwen.*.service"/>
 
-    <!-- ========================================配置数据源========================================= -->
-    <!-- 3.配置连接池属性 -->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driver}"></property>
         <property name="url" value="${jdbc.url}"></property>
-        <property name="username" value="${jdbc.username}"></property>
+        <property name="username" value="${jdbc.user}"></property>
         <property name="password" value="${jdbc.password}"></property>
-        <property name="filters" value="${filters}"></property>
-        <!-- 最大并发连接数 -->
-        <property name="maxActive" value="${maxActive}"></property>
-        <!-- 初始化连接数量 -->
-        <property name="initialSize" value="${initialSize}"></property>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${druid.initialSize}"></property>
+        <property name="minIdle" value="${druid.minIdle}"></property>
+        <property name="maxActive" value="${druid.maxActive}"></property>
+
         <!-- 配置获取连接等待超时的时间 -->
-        <property name="maxWait" value="${maxWait}"></property>
-        <!-- 最小空闲连接数 -->
-        <property name="minIdle" value="${minIdle}"></property>
+        <property name="maxWait" value="${druid.maxWait}"></property>
         <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"></property>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"></property>
+
         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"></property>
-        <property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}"></property>
-        <!-- 打开 removeAbandoned 功能 -->
-        <property name="removeAbandoned" value="true"></property>
-        <!-- 1800 秒，也就是 30 分钟 -->
-        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"></property>
-        <!-- 关闭 abanded 连接时输出错误日志 -->
-        <property name="logAbandoned" value="${logAbandoned}"></property>
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"></property>
+
+        <property name="validationQuery" value="${druid.validationQuery}"></property>
+        <property name="testWhileIdle" value="${druid.testWhileIdle}"></property>
+        <property name="testOnBorrow" value="${druid.testOnBorrow}"></property>
+        <property name="testOnReturn" value="${druid.testOnReturn}"></property>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小  如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。-->
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"></property>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}"></property>
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${druid.filters}"></property>
+
     </bean>
-    <!-- ========================================针对myBatis的配置项============================== -->
-    <!-- 4.配置sqlSessionFactory -->
+
+    <!--配置sqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
-        <!-- 数据源 -->
-        <property name="dataSource" ref="dataSource"></property>
-        <!-- sql映射文件路径 -->
-        <!-- 自动扫描com/demo/mapping/目录下的所有SQL映射的xml文件, 省掉Configuration.xml里的手工配置
-        value="classpath:*/mapper/*.xml"指的是classpath(类路径)下*.mapper包中的所有xml文件 -->
-        <property name="mapperLocations" value="classpath*:com/wenwen/*/mapper/*.xml"></property>
+        <!--注入数据库链接 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!--扫描包 配置别名 -->
+        <property name="typeAliasesPackage" value="com.wenwen.*.model"/>
+        <!--扫描包配置sqlmapper文件 -->
+        <property name="mapperLocations" value="classpath:com/wenwen/**/mapper/*Mapper.xml"/>
     </bean>
-    <!-- 5.配置扫描器  -->
+    <!--配置动态实现dao接口注入spring -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 扫描com.wenwen.*.dao这些包以及它的子包下的所有映射接口类 -->
-        <property name="basePackage" value="com.wenwen.*.mapper"></property>
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-    </bean>
-    <!-- 配置事务管理器 -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <!-- 注入数据库的连接池 -->
-        <property name="dataSource" ref="dataSource"></property>
+        <!--注入sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--basePackage指定要扫描的包，在此包之下的映射器都会被搜索到。可指定多个包，包与包之间用逗号或分号分隔 -->
+        <property name="basePackage" value="com.wenwen.*.mapper"/>
     </bean>
 </beans>

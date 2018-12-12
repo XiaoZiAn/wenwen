@@ -10,18 +10,17 @@
             person_email,
             person_password)
         values (
-            #{personId, jdbcType=VARCHAR},
-			#{personName, jdbcType=VARCHAR},
-			#{personAge, jdbcType=INTEGER},
-			#{personSex, jdbcType=VARCHAR},
-			#{personBirthday, jdbcType=VARCHAR},
-			#{personEmail, jdbcType=VARCHAR},
-			#{personPassword, jdbcType=VARCHAR})
+            #{id, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{sex, jdbcType=VARCHAR},
+			#{birthday, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR})
     </insert>
     <select id="selectByPersonName" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List" />
         from person p
-        where p.person_Name = #{personName, jdbcType=VARCHAR}
+        where p.person_Name = #{name, jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List"/>
@@ -29,15 +28,14 @@
     </select>
 
     <select id="getPasswordByName" resultType="String">
-        select person_password as password from person where person_name = #{personName,jdbcType=VARCHAR}
+        select person_password as password from person where person_name = #{name,jdbcType=VARCHAR}
     </select>
 
     <sql id="Person_List">
-    person_id "personId",
-    person_name "personName",
-    person_age "personAge",
-    person_sex "personSex",
-    person_birthday "personBirthday",
+    person_id "id",
+    person_name "name",
+    person_sex "sex",
+    person_birthday "birthday",
     createtime "createTime"
     </sql>
 </mapper>

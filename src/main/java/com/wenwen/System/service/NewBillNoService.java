@@ -162,7 +162,6 @@ public class NewBillNoService {
      * 测试
      */
     public long createNewBillNo() {
-        System.out.println("开始：" + System.currentTimeMillis());
         NewBillNoService idWorker = new NewBillNoService();
         idWorker.newBillNo(0,0);
         long id = idWorker.nextId();

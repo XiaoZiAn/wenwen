@@ -1,1 +1,0 @@
-INSERT INTO wenwen.person (person_id, person_name, person_age, person_sex, person_birthday, createtime, person_password) VALUES ('5489751564852', 'xx', 22, '男', '1997/07/29', '2018-09-11 10:30:06', '');

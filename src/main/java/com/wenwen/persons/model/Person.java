@@ -10,17 +10,17 @@ import lombok.Data;
 @Data
 @SuppressWarnings("serial")
 public class Person {
-    private String personId;//用户ID
+    private String id;//用户ID
 
-    private String personName;//用户昵称
+    private String name;//用户昵称
 
-    private String personSex;//用户性别
+    private String sex;//用户性别
 
-    private String personBirthday;//用户生日
+    private String birthday;//用户生日
 
-    private String personEmail;//用户邮箱
+    private String email;//用户邮箱
 
-    private String personPassword;//用户密码
+    private String password;//用户密码
 
     private String createTime;//注册时间
 }

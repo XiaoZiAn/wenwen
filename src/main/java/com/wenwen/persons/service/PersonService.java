@@ -1,9 +1,12 @@
 package com.wenwen.persons.service;
 
+import com.wenwen.System.service.NewBillNoService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wenwen.persons.mapper.PersonMapper;
 import com.wenwen.persons.model.Person;
+
 import java.util.List;
 
 /**
@@ -12,27 +15,30 @@ import java.util.List;
  * @since
  */
 @Service
-public class PersonService implements PersonMapper{
+public class PersonService implements PersonMapper {
     @Autowired
     private PersonMapper personMapper;
 
-    public int insert(Person person){
-        int cnt = personMapper.insert(person);
-        return cnt;
+    @Autowired
+    NewBillNoService newBillNoService;
+
+    public int insert(Person person) {
+        String personId = String.valueOf(newBillNoService.createNewBillNo());
+        person.setId(personId);
+        String passworded = BCrypt.hashpw(person.getPassword(), BCrypt.gensalt());
+        person.setPassword(passworded);
+        return personMapper.insert(person);
     }
 
-    public String getPasswordByName (String personName){
-        String password = personMapper.getPasswordByName(personName);
-        return password;
+    public String getPasswordByName(String name) {
+        return personMapper.getPasswordByName(name);
     }
 
-    public Person selectByPersonName (String personName){
-        Person person = personMapper.selectByPersonName(personName);
-        return person;
+    public Person selectByPersonName(String name) {
+        return personMapper.selectByPersonName(name);
     }
 
-    public List<Person> selectAll(){
-        List<Person> persons = personMapper.selectAll();
-        return persons;
+    public List<Person> selectAll() {
+        return personMapper.selectAll();
     }
 }
