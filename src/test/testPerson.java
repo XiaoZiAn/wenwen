@@ -1,3 +1,5 @@
+
+import com.wenwen.System.service.SendEmailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,19 +16,28 @@ import java.util.List;
  * @date 2018/9/11 11:15
  * @since
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring/spring-mybatis.xml")
 public class testPerson {
     @Autowired
     PersonMapper personMapper;
+    @Autowired
+    SendEmailService sendEmailService;
+
     @Test
-    public void getAll (){
-        List<Person> persons =  personMapper.selectAll();
+    public void getAll() {
+        List<Person> persons = personMapper.selectAll();
         System.out.println(persons);
     }
-    public static void main(String args[]){
-        String password = "WX147822";
+
+    public static void main(String args[]) {
+        /*String password = "WX147822";
         String passworded = BCrypt.hashpw(password, BCrypt.gensalt());
-        System.out.println(passworded);
+        System.out.println(passworded);*/
+        try{
+            SendEmailService sendEmailService = new SendEmailService();
+            sendEmailService.sendEmail("935725637@qq.com","测试","Hello world!");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
