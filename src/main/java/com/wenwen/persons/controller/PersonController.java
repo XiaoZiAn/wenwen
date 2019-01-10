@@ -1,7 +1,7 @@
 package com.wenwen.persons.controller;
 
-import com.wenwen.System.dao.Result;
-import com.wenwen.System.service.NewBillNoService;
+import com.wenwen.system.dao.Result;
+import com.wenwen.system.service.NewTableIdService;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class PersonController {
     @Autowired
     PersonService personService;
     @Autowired
-    NewBillNoService newBillNoService;
+    NewTableIdService newTableIdService;
 
     @RequestMapping("/signUp")
     public String signUp() {

@@ -1,6 +1,6 @@
 package com.wenwen.persons.service;
 
-import com.wenwen.System.service.NewBillNoService;
+import com.wenwen.system.service.NewTableIdService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ public class PersonService implements PersonMapper {
     private PersonMapper personMapper;
 
     @Autowired
-    NewBillNoService newBillNoService;
+    NewTableIdService newTableIdService;
 
-    public int insert(Person person) {
-        String personId = String.valueOf(newBillNoService.createNewBillNo());
+    public int insert(Person person) throws Exception {
+        String personId = newTableIdService.getTableId("person","person_id","pe");
         person.setId(personId);
         String passworded = BCrypt.hashpw(person.getPassword(), BCrypt.gensalt());
         person.setPassword(passworded);

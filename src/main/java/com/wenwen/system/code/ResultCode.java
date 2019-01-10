@@ -1,4 +1,4 @@
-package com.wenwen.System.code;
+package com.wenwen.system.code;
 
 /**
  * @author xiaoxinga

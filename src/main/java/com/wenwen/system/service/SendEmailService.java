@@ -1,4 +1,4 @@
-package com.wenwen.System.service;
+package com.wenwen.system.service;
 
 import javax.mail.Address;
 import javax.mail.Message;

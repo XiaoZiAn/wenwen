@@ -11,7 +11,7 @@ import java.util.List;
  * @since
  */
 public interface PersonMapper {
-    int insert(Person person);
+    int insert(Person person) throws Exception;
 
     Person selectByPersonName(String name);
 
