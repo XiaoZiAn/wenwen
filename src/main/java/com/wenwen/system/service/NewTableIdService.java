@@ -23,7 +23,7 @@ public class NewTableIdService {
     final static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
     @Autowired
-    NewTableIdMapper newTableIdMapper;
+    private NewTableIdMapper newTableIdMapper;
 
     /**
      *

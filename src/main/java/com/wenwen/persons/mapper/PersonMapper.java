@@ -11,11 +11,12 @@ import java.util.List;
  * @since
  */
 public interface PersonMapper {
-    int insert(Person person) throws Exception;
 
-    Person selectByPersonName(String name);
+    int insert(@Param("person")Person person);
+
+    Person selectByPersonName(@Param("name")String name);
 
     List<Person> selectAll();
 
-    String getPasswordByName(String name);
+    Person getByNameOrEmail(@Param("name") String name,@Param("email")String email);
 }

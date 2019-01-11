@@ -1,11 +1,14 @@
 package com.wenwen.persons.service;
 
+import com.wenwen.system.service.EncryptService;
 import com.wenwen.system.service.NewTableIdService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wenwen.persons.mapper.PersonMapper;
 import com.wenwen.persons.model.Person;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,23 +18,33 @@ import java.util.List;
  * @since
  */
 @Service
-public class PersonService implements PersonMapper {
+public class PersonService {
     @Autowired
     private PersonMapper personMapper;
 
     @Autowired
-    NewTableIdService newTableIdService;
+    private NewTableIdService newTableIdService;
 
-    public int insert(Person person) throws Exception {
-        String personId = newTableIdService.getTableId("person","person_id","pe");
-        person.setId(personId);
-        String passworded = BCrypt.hashpw(person.getPassword(), BCrypt.gensalt());
-        person.setPassword(passworded);
-        return personMapper.insert(person);
+    @Autowired
+    private EncryptService encryptService;
+
+    public boolean insert(Person val) {
+        Person person = getByNameOrEmail(val.getName(),val.getEmail());
+        boolean b = false;
+        if (person == null) {
+            String personId = newTableIdService.getTableId("person", "id", "pe");
+            val.setId(personId);
+            String passworded = encryptService.encryptString(val.getPassword());
+            val.setPassword(passworded);
+            if(personMapper.insert(val)>0){
+                b = true;
+            }
+        }
+        return b;
     }
 
-    public String getPasswordByName(String name) {
-        return personMapper.getPasswordByName(name);
+    public Person getByNameOrEmail(String name, String email) {
+        return personMapper.getByNameOrEmail(name,email);
     }
 
     public Person selectByPersonName(String name) {
@@ -40,5 +53,13 @@ public class PersonService implements PersonMapper {
 
     public List<Person> selectAll() {
         return personMapper.selectAll();
+    }
+
+    public Person check(Person val) {
+        Person person = getByNameOrEmail(val.getName(),val.getEmail());
+        if (encryptService.checkString(val.getPassword(), person.getPassword())) {
+            return person;
+        }
+        return null;
     }
 }

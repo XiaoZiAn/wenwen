@@ -41,7 +41,7 @@ public class PersonController {
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public String addPerson(Person person, Model model) throws Exception {
         Result result = new Result(Result.ResultEnums.SIGIN_ERROR);
-        if (personService.insert(person) > 0) {
+        if (personService.insert(person)) {
             result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
             model.addAttribute("msg", "注册成功");
             return "SignIn";
@@ -51,13 +51,11 @@ public class PersonController {
     }
 
     @RequestMapping(path = "/check", method = RequestMethod.POST)
-    public String check(Person person, Model model) throws Exception {
-        log.info(person.getName());
+    public String check(Person param, Model model) throws Exception {
+        log.info(param.getName());
         Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);
-        String hashed = personService.getPasswordByName(person.getName());
-        if (BCrypt.checkpw(person.getPassword(), hashed)) {
-            Person person1 = personService.selectByPersonName(person.getName());
-            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);
+        Person person = personService.check(param);
+        if (person != null) {
             return "home";
         } else
             return "index";
