@@ -108,7 +108,7 @@
             var name = $("#name").val();
             var password = $("#password").val();
             var param = {
-                name: name,
+                personName: name,
                 password: password
             };//拼装成json格式
 

@@ -29,15 +29,15 @@ public class PersonService {
     @Autowired
     private EncryptService encryptService;
 
-    public Result insert(Person val) {
-        Person person = getByNameOrEmail(val.getName(), val.getEmail());
+    public Result insert(Person person) {
+        Person val = getByNameOrEmail(person.getPersonName(), person.getEmail());
         Result<Person> result = new Result<Person>(Result.ResultEnums.SIGIN_ERROR);
-        if (person == null) {
+        if (val == null) {
             String personId = newTableIdService.getTableId("person", "id", "pe");
-            val.setId(personId);
-            String passworded = encryptService.encryptString(val.getPassword());
-            val.setPassword(passworded);
-            if (personMapper.insert(val) > 0) {
+            person.setPersonId(personId);
+            String passworded = encryptService.encryptString(person.getPassword());
+            person.setPassword(passworded);
+            if (personMapper.insert(person) > 0) {
                 result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
             }
         }
@@ -57,7 +57,7 @@ public class PersonService {
     }
 
     public Person check(Person val) {
-        Person person = getByNameOrEmail(val.getName(), val.getEmail());
+        Person person = getByNameOrEmail(val.getPersonName(), val.getEmail());
         if (encryptService.checkString(val.getPassword(), person.getPassword())) {
             return person;
         }

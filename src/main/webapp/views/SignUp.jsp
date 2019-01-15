@@ -122,7 +122,7 @@
             var password = $("#password").val();
             var email = $("#email").val();
             var person = {
-                name: name,
+                personName: name,
                 email: email,
                 password: password
             };//拼装成json格式
@@ -137,7 +137,7 @@
                     if (data.rsCode == '0000') {
                         window.location.href = "/views/SignIn.jsp";
                     }
-                    alert(rs.rsMsg);
+                    alert(data.rsMsg);
                 },
                 error: function (data) {
                     alert("错误：" + data.rsCode);
@@ -146,5 +146,6 @@
         })
     })
 </script>
+
 </body>
 </html>

@@ -2,11 +2,10 @@ package com.wenwen.system.service;
 
 import com.wenwen.system.mapper.NewTableIdMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +31,7 @@ public class NewTableIdService {
      * @param prefix     前缀
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public String getTableId(String tableName, String columnName, String prefix) {
         if (prefix.length() != 2) {
             log.info("前缀不等于两位数");
@@ -42,15 +41,17 @@ public class NewTableIdService {
         System.out.println("localDateTime：" + localDateTime);
         String date = localDateTime.format(pattern);
         date = date.replace("-", "");
-        String tableIdStart = prefix.toUpperCase() + date;
+        String tableIdStart = prefix.toUpperCase();
         String maxTableId = newTableIdMapper.getMaxTableId(tableName, columnName);
         int no = 0;
-        if (!StringUtils.isEmpty(maxTableId) && maxTableId.substring(0,10).equals(tableIdStart)) {
-            no = Integer.parseInt(maxTableId.substring(maxTableId.length() - 5, maxTableId.length()));
+        if (!StringUtils.isBlank(maxTableId) && maxTableId.substring(0,2).equals(tableIdStart)) {
+            if(date.equals(maxTableId.substring(2,10))){
+                no = Integer.parseInt(maxTableId.substring(maxTableId.length() - 5, maxTableId.length()));
+            }
         }
         String tableIdEnd = String.format("%0" + 5 + "d", no + 1);
-        String tableId = tableIdStart + tableIdEnd;
-        if (no != 0) {
+        String tableId = tableIdStart + date + tableIdEnd;
+        if (StringUtils.isNotBlank(maxTableId)) {
             newTableIdMapper.updateMaxId(tableId, tableName, columnName);
         } else {
             newTableIdMapper.insertMaxId(tableId, tableName, columnName);

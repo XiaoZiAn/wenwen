@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 @SuppressWarnings("serial")
 public class Person {
-    private String id;//用户ID
+    private String personId;//用户ID
 
-    private String name;//用户昵称
+    private String personName;//用户昵称
 
     private String sex;//用户性别
 

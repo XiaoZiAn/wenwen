@@ -3,24 +3,20 @@
 <mapper namespace="com.wenwen.persons.mapper.PersonMapper">
     <insert id="insert" parameterType="com.wenwen.persons.model.Person">
         insert into person (
-            id,
-            name,
-            sex,
-            birthday,
+            personId,
+            personName,
             email,
             password)
         values (
-            #{id, jdbcType=VARCHAR},
-			#{name, jdbcType=VARCHAR},
-			#{sex, jdbcType=VARCHAR},
-			#{birthday, jdbcType=VARCHAR},
+            #{personId, jdbcType=VARCHAR},
+			#{personName, jdbcType=VARCHAR},
 			#{email, jdbcType=VARCHAR},
 			#{password, jdbcType=VARCHAR})
     </insert>
     <select id="selectByPersonName" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List" />
         from person p
-        where p.name = #{name, jdbcType=VARCHAR}
+        where p.personName = #{name, jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List"/>
@@ -28,12 +24,12 @@
     </select>
 
     <select id="getByNameOrEmail" resultType="com.wenwen.persons.model.Person">
-        select <include refid="Person_List"/> as password from person p where p.name = #{name,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
+        select <include refid="Person_List"/> as password from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
     </select>
 
     <sql id="Person_List">
-        p.id,
-        p.name,
+        p.personId,
+        p.personName,
         p.sex,
         p.birthday,
         p.createtime,
