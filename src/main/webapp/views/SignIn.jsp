@@ -43,7 +43,6 @@
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="/css/style.css">
 
-
     <!-- Modernizr JS -->
     <script src="/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
@@ -51,11 +50,29 @@
     <script src="/js/respond.min.js"></script>
     <![endif]-->
 
-
     <script type="text/javascript">
-        alert(${msg});
+        $(function () {
+            $("#signin").click(function () {
+                $.ajax({
+                    url: "/person/check",        //后台url
+                    type: "POST",                   //类型，POST或者GET
+                    dataType: 'json',              //数据返回类型，可以是xml、json等
+                    contentType : "application/json;charset=UTF-8",
+                    <!-- 向后端传输的数据 -->
+                    data : JSON.stringify({
+                        name : $("#name").val(),
+                        password: $("#password").val()
+                    }),
+                    success: function (result) {      //成功，回调函数
+                        alert(result.rsMsg);
+                    },
+                    error: function (result) {          //失败，回调函数
+                        alert(result.rsMsg);
+                    }
+                });
+            })
+        })
     </script>
-
 </head>
 <body class="style-2">
 
@@ -71,7 +88,7 @@
     <div class="row">
         <div class="col-md-4">
             <!-- Start Sign In Form -->
-            <form action="/person/check" method="post" class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
+            <form class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
                 <h2>Sign In</h2>
                 <div class="form-group">
                     <label for="name" class="sr-only">Username</label>
@@ -88,7 +105,7 @@
                     <p>Not registered? <a href="/person/signUp">Sign Up</a> | <a href="/views/forget.jsp">Forgot Password?</a></p>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Sign In" class="btn btn-primary">
+                    <input type="button" id="signin" value="Sign In" class="btn btn-primary">
                 </div>
             </form>
             <!-- END Sign In Form -->
