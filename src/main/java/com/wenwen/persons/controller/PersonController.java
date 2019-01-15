@@ -41,21 +41,20 @@ public class PersonController {
         return "SignIn";
     }
 
+    @ResponseBody
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
-    public String addPerson(Person person, Model model) throws Exception {
-        Result result = new Result(Result.ResultEnums.SIGIN_ERROR);
-        if (personService.insert(person)) {
-            result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
-            model.addAttribute("msg", "注册成功");
-            return "SignIn";
+    public Result addPerson(@RequestBody Person person) {
+        Result result = personService.insert(person);
+        if ("0001".equals(result.getRsCode())) {
+            result.setRsMsg("用户名或邮箱已注册");
         }
-        log.info("personId:{}注册失败", person.getName());
-        return "SignUp";
+        log.info("person name:{}注册失败", person.getName());
+        return result;
     }
 
     @ResponseBody
     @RequestMapping(path = "/check", method = RequestMethod.POST)
-    public  Result<Person> check(@RequestBody Person param) {
+    public Result<Person> check(@RequestBody Person param) {
         log.info(param.getName());
         Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);
         Person person = personService.check(param);

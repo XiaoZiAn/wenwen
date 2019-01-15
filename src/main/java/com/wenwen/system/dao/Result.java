@@ -15,16 +15,27 @@ public class Result<T> implements Serializable {
     private String rsMsg;
     private String rsCode;
     private T data;
+
     public Result(String rsCode, String rsMsg) {
         this(rsCode, rsMsg, null);
     }
+
     public Result(String rsCode, String rsMsg, T data) {
         this.data = data;
         this.rsCode = rsCode;
         this.rsMsg = rsMsg;
     }
+
     public Result(ResultEnums resultEnums) {
         this(resultEnums.rsCode, resultEnums.rsMsg, null);
+    }
+
+    public void setRsMsg(String rsMsg) {
+        this.rsMsg = rsMsg;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 
     public void setResultEnums(ResultEnums resultEnums) {
@@ -38,19 +49,21 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public String getRsMsg(){
+    public String getRsMsg() {
         return rsMsg;
     }
 
-    public String getRsCode(){
+    public String getRsCode() {
         return rsCode;
     }
+
     public enum ResultEnums {
-        SUCCESS("操作成功","00000"),
-        SIGIN_SUCCESS("注册成功","0000"),
-        SIGIN_ERROR("注册失败","0001"),
-        LOGON_SUCCESS("登录成功","1000"),
-        LOGON_ERROR("登录失败", "1001");
+        SUCCESS("操作成功", "00000"),
+        SIGIN_SUCCESS("注册成功", "0000"),
+        SIGIN_ERROR("注册失败", "0001"),
+        LOGON_SUCCESS("登录成功", "1000"),
+        LOGON_ERROR("登录失败", "1001"),
+        SYSTEM_ERROR("系统异常", "00001");
         public final String rsMsg;
         public final String rsCode;
 
@@ -58,6 +71,7 @@ public class Result<T> implements Serializable {
             this.rsMsg = rsMsg;
             this.rsCode = rsCode;
         }
+
         public static ResultEnums getResultEnumsByCode(String rsCode) {
             for (ResultEnums resultCode : ResultEnums.values()) {
                 if (resultCode.rsCode.equals(rsCode)) {
@@ -67,4 +81,4 @@ public class Result<T> implements Serializable {
             return null;
         }
     }
-    }
+}

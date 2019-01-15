@@ -36,6 +36,7 @@
         p.name,
         p.sex,
         p.birthday,
-        p.createtime
+        p.createtime,
+        p.password
     </sql>
 </mapper>

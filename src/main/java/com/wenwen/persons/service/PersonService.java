@@ -1,5 +1,6 @@
 package com.wenwen.persons.service;
 
+import com.wenwen.system.dao.Result;
 import com.wenwen.system.service.EncryptService;
 import com.wenwen.system.service.NewTableIdService;
 import org.mindrot.jbcrypt.BCrypt;
@@ -28,23 +29,23 @@ public class PersonService {
     @Autowired
     private EncryptService encryptService;
 
-    public boolean insert(Person val) {
-        Person person = getByNameOrEmail(val.getName(),val.getEmail());
-        boolean b = false;
+    public Result insert(Person val) {
+        Person person = getByNameOrEmail(val.getName(), val.getEmail());
+        Result<Person> result = new Result<Person>(Result.ResultEnums.SIGIN_ERROR);
         if (person == null) {
             String personId = newTableIdService.getTableId("person", "id", "pe");
             val.setId(personId);
             String passworded = encryptService.encryptString(val.getPassword());
             val.setPassword(passworded);
-            if(personMapper.insert(val)>0){
-                b = true;
+            if (personMapper.insert(val) > 0) {
+                result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
             }
         }
-        return b;
+        return result;
     }
 
     public Person getByNameOrEmail(String name, String email) {
-        return personMapper.getByNameOrEmail(name,email);
+        return personMapper.getByNameOrEmail(name, email);
     }
 
     public Person selectByPersonName(String name) {
@@ -56,7 +57,7 @@ public class PersonService {
     }
 
     public Person check(Person val) {
-        Person person = getByNameOrEmail(val.getName(),val.getEmail());
+        Person person = getByNameOrEmail(val.getName(), val.getEmail());
         if (encryptService.checkString(val.getPassword(), person.getPassword())) {
             return person;
         }
