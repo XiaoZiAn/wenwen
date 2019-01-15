@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wenwen.persons.mapper.PersonMapper">
+    <insert id="insert" parameterType="com.wenwen.persons.model.Person">
+        insert into person (
+            personId,
+            personName,
+            email,
+            password)
+        values (
+            #{personId, jdbcType=VARCHAR},
+			#{personName, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR})
+    </insert>
+    <select id="selectByPersonName" resultType="com.wenwen.persons.model.Person">
+        select <include refid="Person_List" />
+        from person p
+        where p.personName = #{name, jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultType="com.wenwen.persons.model.Person">
+        select <include refid="Person_List"/>
+        from person p
+    </select>
+
+    <select id="getByNameOrEmail" resultType="com.wenwen.persons.model.Person">
+        select <include refid="Person_List"/> as password from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
+    </select>
+
+    <sql id="Person_List">
+        p.personId,
+        p.personName,
+        p.sex,
+        p.birthday,
+        p.createtime,
+        p.password
+    </sql>
+</mapper>
