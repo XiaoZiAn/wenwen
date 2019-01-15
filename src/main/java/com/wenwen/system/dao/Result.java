@@ -1,7 +1,6 @@
 package com.wenwen.system.dao;
 
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 
 /**

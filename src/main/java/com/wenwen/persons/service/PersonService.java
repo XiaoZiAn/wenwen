@@ -3,14 +3,10 @@ package com.wenwen.persons.service;
 import com.wenwen.system.dao.Result;
 import com.wenwen.system.service.EncryptService;
 import com.wenwen.system.service.NewTableIdService;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wenwen.persons.mapper.PersonMapper;
 import com.wenwen.persons.model.Person;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 /**
