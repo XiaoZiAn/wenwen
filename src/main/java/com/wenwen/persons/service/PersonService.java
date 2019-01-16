@@ -42,6 +42,7 @@ public class PersonService {
                 result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
             }
         } else {
+            result.setResultEnums(Result.ResultEnums.SIGINED);
             result.setRsMsg("用户名或邮箱已注册");
         }
         return result;
@@ -68,6 +69,7 @@ public class PersonService {
         } else if (PersonStatus.WAIT_ACTIVATED.code.equals(person.getStatus())) {
             result.setRsMsg("您的账号未激活！");
         } else if (PersonStatus.SEALED.code.equals(person.getStatus())) {
+            result.setResultEnums(Result.ResultEnums.SEALED);
             result.setRsMsg("您的账号已被封！");
         } else if (encryptService.checkString(val.getPassword(), person.getPassword())) {
             result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);

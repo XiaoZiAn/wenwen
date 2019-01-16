@@ -19,7 +19,7 @@ public class Result<T> implements Serializable {
         this(rsCode, rsMsg, null);
     }
 
-    public Result(String rsCode, String rsMsg, T data) {
+    private Result(String rsCode, String rsMsg, T data) {
         this.data = data;
         this.rsCode = rsCode;
         this.rsMsg = rsMsg;
@@ -60,8 +60,10 @@ public class Result<T> implements Serializable {
         SUCCESS("操作成功", "00000"),
         SIGIN_SUCCESS("注册成功", "0000"),
         SIGIN_ERROR("注册失败", "0001"),
+        SIGINED("已注册", "0002"),
         LOGON_SUCCESS("登录成功", "1000"),
         LOGON_ERROR("登录失败", "1001"),
+        SEALED("账号被封", "1002"),
         SYSTEM_ERROR("系统异常", "00001");
         public final String rsMsg;
         public final String rsCode;

@@ -134,7 +134,7 @@
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.rsCode == '0000') {
+                    if (data.rsCode == '0000' || data.rsCode =='0002') {
                         window.location.href = "/views/SignIn.jsp";
                     }
                     alert(data.rsMsg);
