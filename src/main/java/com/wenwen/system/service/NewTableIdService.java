@@ -57,10 +57,4 @@ public class NewTableIdService {
         }
         return tableId;
     }
-
-    public static void main(String[] args){
-        NewTableIdService newTableIdService = new NewTableIdService();
-        String tableId = newTableIdService.getTableId("student","id","st");
-        System.out.println(tableId);
-    }
 }
