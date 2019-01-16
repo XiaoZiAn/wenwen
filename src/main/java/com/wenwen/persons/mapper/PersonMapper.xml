@@ -24,7 +24,7 @@
     </select>
 
     <select id="getByNameOrEmail" resultType="com.wenwen.persons.model.Person">
-        select <include refid="Person_List"/> as password from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
+        select <include refid="Person_List"/> from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
     </select>
 
     <sql id="Person_List">
@@ -33,6 +33,7 @@
         p.sex,
         p.birthday,
         p.createtime,
-        p.password
+        p.password,
+        p.status
     </sql>
 </mapper>

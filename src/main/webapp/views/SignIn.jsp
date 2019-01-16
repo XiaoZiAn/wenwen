@@ -68,7 +68,7 @@
                 <h2>Sign In</h2>
                 <div class="form-group">
                     <label for="name" class="sr-only">Username</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Username"
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Username/Email"
                            autocomplete="off">
                 </div>
                 <div class="form-group">
@@ -121,10 +121,8 @@
                 success: function (data) {
                     if (data.rsCode == '1000') {
                         window.location.href = "/views/index.jsp";
-                        alert("欢迎来到文文网！");
-                    } else {
-                        alert("用户名或密码错误，请确认后重新登录！");
                     }
+                    alert(data.rsMsg);
                 },
                 error: function (data) {
                     alert("错误：" + data.rsCode);

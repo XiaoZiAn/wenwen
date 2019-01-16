@@ -66,7 +66,7 @@ public class Result<T> implements Serializable {
         public final String rsMsg;
         public final String rsCode;
 
-        private ResultEnums(String rsMsg, String rsCode) {
+        ResultEnums(String rsMsg, String rsCode) {
             this.rsMsg = rsMsg;
             this.rsCode = rsCode;
         }

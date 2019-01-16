@@ -23,4 +23,6 @@ public class Person {
     private String password;//用户密码
 
     private String createTime;//注册时间
+
+    private String status;//账号状态（1：已激活 0：未激活 2：账号被封）
 }
