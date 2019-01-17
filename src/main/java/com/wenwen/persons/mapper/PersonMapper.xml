@@ -27,6 +27,10 @@
         select <include refid="Person_List"/> from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
     </select>
 
+    <update id="updateStatus" >
+        update person p set p.status = #{newStatus,jdbcType=VARCHAR} where p.status = #{oldStatus,jdbcType=VARCHAR}
+    </update>
+
     <sql id="Person_List">
         p.personId,
         p.personName,
@@ -34,6 +38,7 @@
         p.birthday,
         p.createtime,
         p.password,
-        p.status
+        p.status,
+        p.sealedDays
     </sql>
 </mapper>

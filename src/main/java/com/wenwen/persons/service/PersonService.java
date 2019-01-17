@@ -2,9 +2,11 @@ package com.wenwen.persons.service;
 
 import com.wenwen.persons.PersonStatus;
 import com.wenwen.system.dao.Result;
+import com.wenwen.system.service.DateToolsService;
 import com.wenwen.system.service.EncryptService;
 import com.wenwen.system.service.NewTableIdService;
 import com.wenwen.system.service.SendEmailService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wenwen.persons.mapper.PersonMapper;
@@ -29,6 +31,9 @@ public class PersonService {
 
     @Autowired
     private SendEmailService sendEmailService;
+
+    @Autowired
+    DateToolsService dateToolsService;
 
     public Result insert(Person person) {
         Person val = getByNameOrEmail(person.getPersonName(), person.getEmail());
@@ -68,13 +73,18 @@ public class PersonService {
             result.setRsMsg("用户不存在！");
         } else if (PersonStatus.WAIT_ACTIVATED.code.equals(person.getStatus())) {
             result.setRsMsg("您的账号未激活！");
-        } else if (PersonStatus.SEALED.code.equals(person.getStatus())) {
+        } else if (StringUtils.isNotBlank(dateToolsService.nowToUnbLockTime(person.getUnbLockTime()))) {
             result.setResultEnums(Result.ResultEnums.SEALED);
             result.setRsMsg("您的账号已被封！");
-        } else if (encryptService.checkString(val.getPassword(), person.getPassword())) {
-            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);
         } else {
-            result.setRsMsg("密码错误！");
+            if(PersonStatus.SEALED.code.equals(person.getStatus())){
+                personMapper.updateStatus(PersonStatus.ACTIVATED.code,PersonStatus.SEALED.code);
+            }
+            if (encryptService.checkString(val.getPassword(), person.getPassword())) {
+                result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);
+            } else {
+                result.setRsMsg("密码错误！");
+            }
         }
         return result;
     }

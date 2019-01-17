@@ -2,6 +2,8 @@ package com.wenwen.persons.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author xiaoxinga
  * @date 2018/9/10 11:19
@@ -25,4 +27,8 @@ public class Person {
     private String createTime;//注册时间
 
     private String status;//账号状态（1：已激活 0：未激活 2：账号被封）
+
+    private Date unbLockTime;//解封时间
+
+    private long sealedTime;//需被封时间
 }
