@@ -41,7 +41,9 @@ public class PersonController {
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public Result addPerson(@RequestBody Person person) {
         Result result = personService.insert(person);
-        log.info("person name:{}注册失败", person.getPersonName());
+        if(!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())){
+            log.info("person name:{}注册失败", person.getPersonName());
+        }
         return result;
     }
 
