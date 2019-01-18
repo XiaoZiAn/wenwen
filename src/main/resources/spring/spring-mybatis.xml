@@ -6,6 +6,17 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:/SLO.properties</value>
+            </list>
+        </property>
+    </bean>
     <!-- 1.引入属性文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
@@ -58,4 +69,5 @@
         <!--basePackage指定要扫描的包，在此包之下的映射器都会被搜索到。可指定多个包，包与包之间用逗号或分号分隔 -->
         <property name="basePackage" value="com.wenwen.*.mapper"/>
     </bean>
+
 </beans>

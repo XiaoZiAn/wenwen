@@ -6,26 +6,40 @@
             personId,
             personName,
             email,
-            password)
+            password,
+            activateCode)
         values (
             #{personId, jdbcType=VARCHAR},
 			#{personName, jdbcType=VARCHAR},
 			#{email, jdbcType=VARCHAR},
-			#{password, jdbcType=VARCHAR})
+			#{password, jdbcType=VARCHAR},
+			#{activateCode, jdbcType=VARCHAR})
     </insert>
+
+    <select id="selectActivateCodeByPersonName" resultType="String">
+        select p.ActivateCode
+        from person p
+        where p.personName = #{personName, jdbcType=VARCHAR}
+    </select>
+
     <select id="selectByPersonName" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List" />
         from person p
-        where p.personName = #{name, jdbcType=VARCHAR}
+        where p.personName = #{personName, jdbcType=VARCHAR}
     </select>
+
     <select id="selectAll" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List"/>
         from person p
     </select>
 
     <select id="getByNameOrEmail" resultType="com.wenwen.persons.model.Person">
-        select <include refid="Person_List"/> as password from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
+        select <include refid="Person_List"/> from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
     </select>
+
+    <update id="updateStatus" >
+        update person p set p.status = #{newStatus,jdbcType=VARCHAR} where p.status = #{oldStatus,jdbcType=VARCHAR}
+    </update>
 
     <sql id="Person_List">
         p.personId,
@@ -33,6 +47,8 @@
         p.sex,
         p.birthday,
         p.createtime,
-        p.password
+        p.password,
+        p.status,
+        p.sealedDays
     </sql>
 </mapper>

@@ -2,7 +2,7 @@ package com.wenwen.system.service;
 
 import com.wenwen.system.mapper.LockMapper;
 import com.wenwen.system.model.EorrorException;
-import com.wenwen.system.model.Lock;
+import com.wenwen.system.dao.Lock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

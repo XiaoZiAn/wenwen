@@ -1,6 +1,6 @@
 package com.wenwen.system.mapper;
 
-import com.wenwen.system.model.Lock;
+import com.wenwen.system.dao.Lock;
 import org.apache.ibatis.annotations.Param;
 
 /**

@@ -1,6 +1,6 @@
 package com.wenwen.system.service;
 
-import com.wenwen.system.model.Lock;
+import com.wenwen.system.dao.Lock;
 import com.wenwen.system.model.LockSight;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

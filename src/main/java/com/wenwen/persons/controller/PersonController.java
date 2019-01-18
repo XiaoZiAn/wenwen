@@ -23,9 +23,9 @@ import java.util.List;
 @RequestMapping(path = "/person")
 public class PersonController {
     @Autowired
-    PersonService personService;
+    private PersonService personService;
     @Autowired
-    NewTableIdService newTableIdService;
+    private NewTableIdService newTableIdService;
 
     @RequestMapping("/signUp")
     public String signUp() {
@@ -41,10 +41,9 @@ public class PersonController {
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public Result addPerson(@RequestBody Person person) {
         Result result = personService.insert(person);
-        if ("0001".equals(result.getRsCode())) {
-            result.setRsMsg("用户名或邮箱已注册");
+        if(!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())){
+            log.info("person name:{}注册失败", person.getPersonName());
         }
-        log.info("person name:{}注册失败", person.getPersonName());
         return result;
     }
 
@@ -52,11 +51,7 @@ public class PersonController {
     @RequestMapping(path = "/check", method = RequestMethod.POST)
     public Result<Person> check(@RequestBody Person param) {
         log.info(param.getPersonName());
-        Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);
-        Person person = personService.check(param);
-        if (person != null) {
-            result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS);
-        }
+        Result<Person> result = personService.check(param);
         return result;
     }
 
@@ -66,5 +61,11 @@ public class PersonController {
         System.out.println("success");
         log.info("com.wenwen.persons:{}", persons);
         return persons;
+    }
+
+    @RequestMapping(path = "/activate", method = RequestMethod.GET)
+    public void activate(String personName, String activateCode) {
+        log.info(personName + "激活账号");
+        personService.activate(personName,activateCode);
     }
 }

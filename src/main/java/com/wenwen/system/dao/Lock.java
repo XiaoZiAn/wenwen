@@ -1,4 +1,4 @@
-package com.wenwen.system.model;
+package com.wenwen.system.dao;
 
 import lombok.Data;
 
@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class Lock {
-    String value;
-    String sight;
+    String value;//加锁标识
+    String sight;//加锁场景
 }
