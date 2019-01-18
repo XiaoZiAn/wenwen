@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Param;
  * @since
  */
 public interface EmailTemplateMapper {
-    EmailTemplate getEmailTemplate(@Param("emailTheme") String emailTheme);
+    EmailTemplate getEmailTemplate(@Param("emailType") String emailType);
 
 }

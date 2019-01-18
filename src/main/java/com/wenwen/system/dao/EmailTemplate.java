@@ -9,9 +9,9 @@ import lombok.Data;
  */
 @Data
 public class EmailTemplate {
-    private String emailTitle;
+    private String emailTitle;//邮件主题
 
-    private String emailTheme;
+    private String emailType;//邮件类型
 
-    private String emailContent;
+    private String emailContent;//邮件内容
 }

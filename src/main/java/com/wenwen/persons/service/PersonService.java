@@ -1,8 +1,11 @@
 package com.wenwen.persons.service;
 
 import com.wenwen.persons.PersonStatus;
+import com.wenwen.system.dao.Email;
 import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.dao.Result;
+import com.wenwen.system.enums.EmailStatus;
+import com.wenwen.system.enums.EmailType;
 import com.wenwen.system.model.EorrorException;
 import com.wenwen.system.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,10 @@ public class PersonService {
     private ActivateUrlService activateUrlService;
 
     @Autowired
-    DateToolsService dateToolsService;
+    private DateToolsService dateToolsService;
+
+    @Autowired
+    private EmailService emailService;
 
     public Result insert(Person person) {
         Person val = getByNameOrEmail(person.getPersonName(), person.getEmail());
@@ -70,14 +76,23 @@ public class PersonService {
     }
 
     public void sendActivateEmail(Person person) throws Exception {
-        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(com.wenwen.system.enums.EmailTemplate.ACTIVATE_EMAIL.code);
+        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(EmailType.ACTIVATE_EMAIL.code);
         String content = emailTemplate.getEmailContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
+        Email email = new Email();
+        email.setSendTo(person.getEmail());
+        email.setEmailType(emailTemplate.getEmailType());
+        email.setEmailTitle(emailTemplate.getEmailTitle());
+        email.setEmailContent(content);
+        emailService.insertEmail(email);
         try {
-            sendEmailService.sendEmail(person.getEmail(), emailTemplate.getEmailTitle(), content);
+            sendEmailService.sendEmail(email);
         } catch (Exception e) {
+            emailService.updateStatus(email.getSendTo(),email.getEmailType(),EmailStatus.send_faild.code,EmailStatus.wait_send.code);
             log.info(person.getEmail() + "的账户激活邮件发送失败");
+            e.printStackTrace();
             throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
         }
+        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
     }
 
     public Person getByNameOrEmail(String name, String email) {

@@ -16,7 +16,7 @@ public class EmailTemplateService {
     @Autowired
     private EmailTemplateMapper emailTemplateMapper;
 
-    public EmailTemplate getEmailTemplate(String emailTheme){
-        return emailTemplateMapper.getEmailTemplate(emailTheme);
+    public EmailTemplate getEmailTemplate(String emailType){
+        return emailTemplateMapper.getEmailTemplate(emailType);
     }
 }
