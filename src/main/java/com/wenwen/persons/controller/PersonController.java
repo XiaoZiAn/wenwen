@@ -23,9 +23,9 @@ import java.util.List;
 @RequestMapping(path = "/person")
 public class PersonController {
     @Autowired
-    PersonService personService;
+    private PersonService personService;
     @Autowired
-    NewTableIdService newTableIdService;
+    private NewTableIdService newTableIdService;
 
     @RequestMapping("/signUp")
     public String signUp() {
@@ -61,10 +61,9 @@ public class PersonController {
         return persons;
     }
 
-    @ResponseBody
-    @RequestMapping(path = "/activate", method = RequestMethod.POST)
-    public void activate(@RequestBody Person param) {
-        log.info(param.getEmail() + "激活账号");
-        personService.activate(param);
+    @RequestMapping(path = "/activate", method = RequestMethod.GET)
+    public void activate(String personName, String activateCode) {
+        log.info(personName + "激活账号");
+        personService.activate(personName,activateCode);
     }
 }

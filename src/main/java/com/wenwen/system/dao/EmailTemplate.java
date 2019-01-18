@@ -13,5 +13,5 @@ public class EmailTemplate {
 
     private String emailTheme;
 
-    private String emaileContent;
+    private String emailContent;
 }

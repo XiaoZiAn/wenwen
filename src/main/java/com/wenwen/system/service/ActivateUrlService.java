@@ -1,6 +1,7 @@
 package com.wenwen.system.service;
 
 import com.wenwen.persons.model.Person;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActivateUrlService {
 
-    private final static String url = "http://localhost:8020/person/activate/";
+    @Value("${wenwen.activate.http.url}")
+    private String activateUrl;
 
     public String getActivateUrl(Person person) {
-        return url + "personName=" + person.getPersonName() + "activateCode=" + person.getActivateCode();
+        return activateUrl + "?personName=" + person.getPersonName() + "&activateCode=" + person.getActivateCode();
     }
 }

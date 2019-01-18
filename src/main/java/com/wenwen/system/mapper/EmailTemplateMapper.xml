@@ -3,6 +3,6 @@
 <mapper namespace="com.wenwen.system.mapper.EmailTemplateMapper">
 
     <select id="getEmailTemplate" resultType="com.wenwen.system.dao.EmailTemplate">
-        select e.emailTitle,e.emailTheme,e.emailContent from emailtemplate e where e.emailTheme = #{emailTheme, jdbcType=VARCHAR}
+        select e.emailTitle,e.emailTheme,e.emailContent from emailtemplate e where e.emailTheme = #{emailTheme, jdbcType=VARCHAR} and e.status = '1'
     </select>
 </mapper>

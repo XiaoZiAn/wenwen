@@ -71,7 +71,7 @@ public class PersonService {
 
     public void sendActivateEmail(Person person) throws Exception {
         EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(com.wenwen.system.enums.EmailTemplate.ACTIVATE_EMAIL.code);
-        String content = emailTemplate.getEmaileContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
+        String content = emailTemplate.getEmailContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
         try {
             sendEmailService.sendEmail(person.getEmail(), emailTemplate.getEmailTitle(), content);
         } catch (Exception e) {
@@ -116,12 +116,12 @@ public class PersonService {
         return result;
     }
 
-    public void activate(Person val) {
-        String activateCode = personMapper.selectActivateCodeByPersonName(val.getPersonName());
-        if (activateCode.equals(val.getActivateCode())) {
+    public void activate(String val1, String val2) {
+        String activateCode = personMapper.selectActivateCodeByPersonName(val1);
+        if (activateCode.equals(val2)) {
             personMapper.updateStatus(PersonStatus.ACTIVATED.code, PersonStatus.WAIT_ACTIVATED.code);
         } else {
-            log.info(val.getPersonName() + "账号激活失败！");
+            log.info(val1 + "账号激活失败！");
         }
     }
 }

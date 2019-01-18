@@ -6,6 +6,17 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:/SLO.properties</value>
+            </list>
+        </property>
+    </bean>
     <!-- 1.引入属性文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
