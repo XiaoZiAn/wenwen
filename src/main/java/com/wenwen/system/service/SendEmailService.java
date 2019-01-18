@@ -3,9 +3,12 @@ package com.wenwen.system.service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+import com.wenwen.persons.model.Person;
 import com.wenwen.system.dao.Email;
+import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.enums.EmailStatus;
+import com.wenwen.system.enums.EmailType;
+import com.wenwen.system.model.EorrorException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +32,12 @@ public class SendEmailService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private EmailTemplateService emailTemplateService;
+
+    @Autowired
+    private ActivateUrlService activateUrlService;
 
     /**
      ** 邮件单发（自由编辑短信，并发送，适用于私信）
@@ -63,4 +72,27 @@ public class SendEmailService {
         // 发送邮件
         Transport.send(message);
     }
+
+    public void sendActivateEmail(Person person) throws Exception {
+        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(EmailType.ACTIVATE_EMAIL.code);
+        String content = emailTemplate.getEmailContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
+        Email email = new Email();
+        email.setSendDate(DateToolsService.getNowDate());
+        email.setSendTo(person.getEmail());
+        email.setEmailType(emailTemplate.getEmailType());
+        email.setEmailTitle(emailTemplate.getEmailTitle());
+        email.setEmailContent(content);
+        email.setIsBatch("0");
+        emailService.insertEmail(email);
+        try {
+            sendEmail(email);
+        } catch (Exception e) {
+            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
+            log.info(person.getEmail() + "的账户激活邮件发送失败");
+            e.printStackTrace();
+            throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
+        }
+        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
+    }
+
 }

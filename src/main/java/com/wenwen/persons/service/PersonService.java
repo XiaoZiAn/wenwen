@@ -38,12 +38,6 @@ public class PersonService {
     private SendEmailService sendEmailService;
 
     @Autowired
-    private EmailTemplateService emailTemplateService;
-
-    @Autowired
-    private ActivateUrlService activateUrlService;
-
-    @Autowired
     private DateToolsService dateToolsService;
 
     @Autowired
@@ -63,7 +57,7 @@ public class PersonService {
                 result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
                 result.setRsMsg("注册成功，请查看邮箱激活账号！");
                 try {
-                    sendActivateEmail(person);
+                    sendEmailService.sendActivateEmail(person);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -73,28 +67,6 @@ public class PersonService {
             result.setRsMsg("用户名或邮箱已注册");
         }
         return result;
-    }
-
-    public void sendActivateEmail(Person person) throws Exception {
-        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(EmailType.ACTIVATE_EMAIL.code);
-        String content = emailTemplate.getEmailContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
-        Email email = new Email();
-        email.setSendDate(DateToolsService.getNowDate());
-        email.setSendTo(person.getEmail());
-        email.setEmailType(emailTemplate.getEmailType());
-        email.setEmailTitle(emailTemplate.getEmailTitle());
-        email.setEmailContent(content);
-        email.setIsBatch("0");
-        emailService.insertEmail(email);
-        try {
-            sendEmailService.sendEmail(email);
-        } catch (Exception e) {
-            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
-            log.info(person.getEmail() + "的账户激活邮件发送失败");
-            e.printStackTrace();
-            throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
-        }
-        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
     }
 
     public Person getByNameOrEmail(String name, String email) {
