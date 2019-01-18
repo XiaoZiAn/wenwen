@@ -5,14 +5,18 @@
     <select id="insert" parameterType="com.wenwen.system.dao.Email">
         insert into email (
             sendTo,
+            sendDate,
             emailTitle,
             emailContent,
-            emailType)
+            emailType,
+            isBatch)
             values (
             #{email.sendTo, jdbcType=VARCHAR},
+            #{email.sendDate, jdbcType=VARCHAR},
             #{email.emailTitle, jdbcType=VARCHAR},
             #{email.emailContent, jdbcType=VARCHAR},
-            #{email.emailType, jdbcType=VARCHAR})
+            #{email.emailType, jdbcType=VARCHAR},
+            #{email.isBatch, jdbcType=VARCHAR})
     </select>
 
     <update id="updateStatus">

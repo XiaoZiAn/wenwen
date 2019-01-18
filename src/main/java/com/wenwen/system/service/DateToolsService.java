@@ -17,7 +17,12 @@ import java.util.Date;
 @Service
 public class DateToolsService {
 
-    final static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    final static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static String getNowDate(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        return pattern.format(localDateTime);
+    }
 
     public String nowToUnbLockTime(Date unbLockTime) {
         LocalDateTime localDateTime = LocalDateTime.now();

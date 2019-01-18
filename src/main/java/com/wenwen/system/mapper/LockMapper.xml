@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wenwen.system.mapper.LockMapper">
 
-    <select id="getLock" resultType="com.wenwen.system.model.Lock">
+    <select id="getLock" resultType="com.wenwen.system.dao.Lock">
         select * from lock l where l.value = #{value, jdbcType=VARCHAR} and l.sight = #{sight, jdbcType=VARCHAR}
     </select>
 

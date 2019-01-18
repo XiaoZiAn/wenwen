@@ -79,15 +79,17 @@ public class PersonService {
         EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(EmailType.ACTIVATE_EMAIL.code);
         String content = emailTemplate.getEmailContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
         Email email = new Email();
+        email.setSendDate(DateToolsService.getNowDate());
         email.setSendTo(person.getEmail());
         email.setEmailType(emailTemplate.getEmailType());
         email.setEmailTitle(emailTemplate.getEmailTitle());
         email.setEmailContent(content);
+        email.setIsBatch("0");
         emailService.insertEmail(email);
         try {
             sendEmailService.sendEmail(email);
         } catch (Exception e) {
-            emailService.updateStatus(email.getSendTo(),email.getEmailType(),EmailStatus.send_faild.code,EmailStatus.wait_send.code);
+            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
             log.info(person.getEmail() + "的账户激活邮件发送失败");
             e.printStackTrace();
             throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
