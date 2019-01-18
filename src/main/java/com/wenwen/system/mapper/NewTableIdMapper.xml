@@ -3,15 +3,15 @@
 <mapper namespace="com.wenwen.system.mapper.NewTableIdMapper">
 
     <select id="getMaxTableId" resultType="String">
-        select tm.maxId from table_maxid tm where tm.columnName = #{columnName, jdbcType=VARCHAR} and tm.tableName = #{tableName, jdbcType=VARCHAR}
+        select tm.maxId from tablemaxid tm where tm.columnName = #{columnName, jdbcType=VARCHAR} and tm.tableName = #{tableName, jdbcType=VARCHAR}
     </select>
 
     <update id="updateMaxId">
-        update table_maxid tm set tm.maxId = #{tableId, jdbcType=VARCHAR} where tm.columnName = #{columnName, jdbcType=VARCHAR} and tm.tableName = #{tableName, jdbcType=VARCHAR}
+        update tablemaxid tm set tm.maxId = #{tableId, jdbcType=VARCHAR} where tm.columnName = #{columnName, jdbcType=VARCHAR} and tm.tableName = #{tableName, jdbcType=VARCHAR}
     </update>
 
     <insert id="insertMaxId">
-        insert into table_maxid (tableName, columnName, maxId)
+        insert into tablemaxid (tableName, columnName, maxId)
 		 values(#{tableName, jdbcType=VARCHAR}, #{columnName, jdbcType=VARCHAR}, #{tableId, jdbcType=VARCHAR})
     </insert>
 </mapper>
