@@ -16,8 +16,8 @@ public class EmailService {
     @Autowired
     private EmailMapper emailMapper;
 
-    public int insertEmail(Email email) {
-        return emailMapper.insert(email);
+    public void insertEmail(Email email) {
+        emailMapper.insert(email);
     }
 
     public void updateStatus(String sendTo, String emailType, String newStatus, String oldSatus) {

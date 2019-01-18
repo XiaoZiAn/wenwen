@@ -1,6 +1,6 @@
 package com.wenwen.persons.service;
 
-import com.wenwen.persons.PersonStatus;
+import com.wenwen.persons.enums.PersonStatus;
 import com.wenwen.system.dao.Email;
 import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.dao.Result;

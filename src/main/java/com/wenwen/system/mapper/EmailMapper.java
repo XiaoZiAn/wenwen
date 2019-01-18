@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
  * @since
  */
 public interface EmailMapper {
-    int insert(@Param("email") Email email);
+    void insert(@Param("email") Email email);
 
     void updateStatus(@Param("sendTo") String sendTo, @Param("emailType") String emailType, @Param("newStatus") String newStatus, @Param("oldStatus") String oldStatus);
 }

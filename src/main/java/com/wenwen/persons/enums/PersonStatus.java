@@ -1,4 +1,4 @@
-package com.wenwen.persons;
+package com.wenwen.persons.enums;
 
 /**
  * @author xiaoxinga
