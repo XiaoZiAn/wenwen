@@ -13,11 +13,13 @@ public interface PersonMapper {
 
     int insert(Person person);
 
-    Person selectByPersonName(@Param("personName")String personName);
+    String selectActivateCodeByPersonName(@Param("personName") String personName);
+
+    Person selectByPersonName(@Param("personName") String personName);
 
     List<Person> selectAll();
 
-    Person getByNameOrEmail(@Param("personName") String personName,@Param("email")String email);
+    Person getByNameOrEmail(@Param("personName") String personName, @Param("email") String email);
 
-    void updateStatus(@Param("newStatus")String newStatus,@Param("oldStatus") String oldStatus);
+    void updateStatus(@Param("newStatus") String newStatus, @Param("oldStatus") String oldStatus);
 }

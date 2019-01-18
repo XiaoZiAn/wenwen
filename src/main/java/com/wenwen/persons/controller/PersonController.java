@@ -60,4 +60,11 @@ public class PersonController {
         log.info("com.wenwen.persons:{}", persons);
         return persons;
     }
+
+    @ResponseBody
+    @RequestMapping(path = "/activate", method = RequestMethod.POST)
+    public void activate(@RequestBody Person param) {
+        log.info(param.getEmail() + "激活账号");
+        personService.activate(param);
+    }
 }

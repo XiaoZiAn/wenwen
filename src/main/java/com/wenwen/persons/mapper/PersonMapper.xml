@@ -6,18 +6,28 @@
             personId,
             personName,
             email,
-            password)
+            password,
+            activateCode)
         values (
             #{personId, jdbcType=VARCHAR},
 			#{personName, jdbcType=VARCHAR},
 			#{email, jdbcType=VARCHAR},
-			#{password, jdbcType=VARCHAR})
+			#{password, jdbcType=VARCHAR},
+			#{activateCode, jdbcType=VARCHAR})
     </insert>
+
+    <select id="selectActivateCodeByPersonName" resultType="String">
+        select p.ActivateCode
+        from person p
+        where p.personName = #{personName, jdbcType=VARCHAR}
+    </select>
+
     <select id="selectByPersonName" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List" />
         from person p
-        where p.personName = #{name, jdbcType=VARCHAR}
+        where p.personName = #{personName, jdbcType=VARCHAR}
     </select>
+
     <select id="selectAll" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List"/>
         from person p

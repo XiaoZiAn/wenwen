@@ -1,23 +1,25 @@
 package com.wenwen.persons.service;
 
 import com.wenwen.persons.PersonStatus;
+import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.dao.Result;
-import com.wenwen.system.service.DateToolsService;
-import com.wenwen.system.service.EncryptService;
-import com.wenwen.system.service.NewTableIdService;
-import com.wenwen.system.service.SendEmailService;
+import com.wenwen.system.model.EorrorException;
+import com.wenwen.system.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wenwen.persons.mapper.PersonMapper;
 import com.wenwen.persons.model.Person;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author xiaoxinga
  * @date 2018/9/19 10:23
  * @since
  */
+@Slf4j
 @Service
 public class PersonService {
     @Autowired
@@ -33,6 +35,12 @@ public class PersonService {
     private SendEmailService sendEmailService;
 
     @Autowired
+    private EmailTemplateService emailTemplateService;
+
+    @Autowired
+    private ActivateUrlService activateUrlService;
+
+    @Autowired
     DateToolsService dateToolsService;
 
     public Result insert(Person person) {
@@ -43,14 +51,33 @@ public class PersonService {
             person.setPersonId(personId);
             String passworded = encryptService.encryptString(person.getPassword());
             person.setPassword(passworded);
+            String activateCode = UUID.randomUUID().toString();
+            person.setActivateCode(activateCode);
             if (personMapper.insert(person) > 0) {
                 result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
+                result.setRsMsg("注册成功，请查看邮箱激活账号！");
+                try {
+                    sendActivateEmail(person);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             result.setResultEnums(Result.ResultEnums.SIGINED);
             result.setRsMsg("用户名或邮箱已注册");
         }
         return result;
+    }
+
+    public void sendActivateEmail(Person person) throws Exception {
+        EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(com.wenwen.system.enums.EmailTemplate.ACTIVATE_EMAIL.code);
+        String content = emailTemplate.getEmaileContent().replace("[&url&]", activateUrlService.getActivateUrl(person));
+        try {
+            sendEmailService.sendEmail(person.getEmail(), emailTemplate.getEmailTitle(), content);
+        } catch (Exception e) {
+            log.info(person.getEmail() + "的账户激活邮件发送失败");
+            throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
+        }
     }
 
     public Person getByNameOrEmail(String name, String email) {
@@ -77,8 +104,8 @@ public class PersonService {
             result.setResultEnums(Result.ResultEnums.SEALED);
             result.setRsMsg("您的账号已被封！");
         } else {
-            if(PersonStatus.SEALED.code.equals(person.getStatus())){
-                personMapper.updateStatus(PersonStatus.ACTIVATED.code,PersonStatus.SEALED.code);
+            if (PersonStatus.SEALED.code.equals(person.getStatus())) {
+                personMapper.updateStatus(PersonStatus.ACTIVATED.code, PersonStatus.SEALED.code);
             }
             if (encryptService.checkString(val.getPassword(), person.getPassword())) {
                 result.setResultEnums(Result.ResultEnums.LOGON_SUCCESS, person);
@@ -87,5 +114,14 @@ public class PersonService {
             }
         }
         return result;
+    }
+
+    public void activate(Person val) {
+        String activateCode = personMapper.selectActivateCodeByPersonName(val.getPersonName());
+        if (activateCode.equals(val.getActivateCode())) {
+            personMapper.updateStatus(PersonStatus.ACTIVATED.code, PersonStatus.WAIT_ACTIVATED.code);
+        } else {
+            log.info(val.getPersonName() + "账号激活失败！");
+        }
     }
 }
