@@ -18,9 +18,16 @@ import java.util.Date;
 public class DateToolsService {
 
     final static DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    final static DateTimeFormatter pattern1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static String getNowDate(){
         LocalDateTime localDateTime = LocalDateTime.now();
+        return pattern.format(localDateTime);
+    }
+
+    public static String getHalfHourTime(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime.plusMinutes(30);
         return pattern.format(localDateTime);
     }
 

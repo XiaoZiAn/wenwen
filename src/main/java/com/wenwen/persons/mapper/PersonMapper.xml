@@ -41,6 +41,7 @@
         p.personName,
         p.sex,
         p.birthday,
+        p.email,
         p.createtime,
         p.password,
         p.status,

@@ -6,7 +6,8 @@ package com.wenwen.system.enums;
  * @since
  */
 public enum EmailType {
-    ACTIVATE_EMAIL("账号激活邮件", "ActivateEmail");
+    ACTIVATE_EMAIL("账号激活邮件", "ActivateEmail"),
+    CHANGEPASSWORD_EMAIL("账号密码修改邮件","ChangePasswordEmail");
     public final String name;
     public final String code;
 

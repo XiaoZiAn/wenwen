@@ -76,7 +76,7 @@ public class PersonService {
         if (person == null) {
             result.setRsMsg("用户不存在！");
         } else if (PersonStatus.WAIT_ACTIVATED.code.equals(person.getStatus())) {
-            result.setRsMsg("您的账号未激活！");
+            result.setResultEnums(Result.ResultEnums.WAIT_ACTIVATED);
         } else if (StringUtils.isNotBlank(dateToolsService.nowToUnbLockTime(person.getUnbLockTime()))) {
             result.setResultEnums(Result.ResultEnums.SEALED);
             result.setRsMsg("您的账号已被封！");
@@ -99,6 +99,17 @@ public class PersonService {
             personMapper.updateStatus(PersonStatus.ACTIVATED.code, PersonStatus.WAIT_ACTIVATED.code);
         } else {
             log.info(val1 + "账号激活失败！");
+        }
+    }
+
+    public void sendChangePasswordEmail(String val){
+        Person person = getByNameOrEmail(val, val);
+        person.setPasswordCode(UUID.randomUUID().toString());
+        person.setPasswordCodeLastTime(DateToolsService.getHalfHourTime());
+        try {
+            sendEmailService.sendChangePasswordEmail(person);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

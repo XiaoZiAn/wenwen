@@ -64,6 +64,7 @@ public class Result<T> implements Serializable {
         LOGON_SUCCESS("登录成功", "1000"),
         LOGON_ERROR("登录失败", "1001"),
         SEALED("账号被封", "1002"),
+        WAIT_ACTIVATED("账号未激活","1003"),
         SYSTEM_ERROR("系统异常", "00001");
         public final String rsMsg;
         public final String rsCode;
