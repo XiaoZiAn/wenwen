@@ -69,10 +69,6 @@ public class PersonService {
         return personMapper.selectByPersonName(name);
     }
 
-    public List<Person> selectAll() {
-        return personMapper.selectAll();
-    }
-
     public Result<Person> check(Person val) {
         val.setEmail(val.getPersonName());// 用户可能用邮箱登录
         Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);

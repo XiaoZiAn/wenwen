@@ -28,11 +28,6 @@
         where p.personName = #{personName, jdbcType=VARCHAR}
     </select>
 
-    <select id="selectAll" resultType="com.wenwen.persons.model.Person">
-        select <include refid="Person_List"/>
-        from person p
-    </select>
-
     <select id="getByNameOrEmail" resultType="com.wenwen.persons.model.Person">
         select <include refid="Person_List"/> from person p where p.personName = #{personName,jdbcType=VARCHAR} or p.email = #{email,jdbcType=VARCHAR}
     </select>

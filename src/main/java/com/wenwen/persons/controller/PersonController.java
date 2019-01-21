@@ -52,14 +52,6 @@ public class PersonController {
         return result;
     }
 
-    @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
-    public List<Person> selectPersons(String json) throws Exception {
-        List<Person> persons = personService.selectAll();
-        System.out.println("success");
-        log.info("com.wenwen.persons:{}", persons);
-        return persons;
-    }
-
     @RequestMapping(path = "/activate", method = RequestMethod.GET)
     public void activate(String personName, String activateCode) {
         log.info(personName + "激活账号");
