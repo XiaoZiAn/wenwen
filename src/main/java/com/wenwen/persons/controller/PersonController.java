@@ -1,7 +1,7 @@
 package com.wenwen.persons.controller;
 
 import com.wenwen.system.dao.Result;
-import com.wenwen.system.service.NewTableIdService;
+import com.wenwen.system.service.SendEmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.wenwen.persons.model.Person;
 import com.wenwen.persons.service.PersonService;
 import org.springframework.web.bind.annotation.ResponseBody;
-import java.util.List;
 
 /**
  * @author xiaoxinga
@@ -22,19 +21,21 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/person")
 public class PersonController {
+
     @Autowired
     private PersonService personService;
-    @Autowired
-    private NewTableIdService newTableIdService;
 
-    @RequestMapping("/signUp")
+    @Autowired
+    private SendEmailService sendEmailService;
+
+    @RequestMapping("/signup")
     public String signUp() {
-        return "SignUp";
+        return "signup";
     }
 
-    @RequestMapping("/signIn")
+    @RequestMapping("/signin")
     public String signIn() {
-        return "SignIn";
+        return "signin";
     }
 
     @ResponseBody
@@ -55,16 +56,37 @@ public class PersonController {
         return result;
     }
 
-    @RequestMapping(path = "/selectPersons", method = RequestMethod.POST)
-    public List<Person> selectPersons(String json) throws Exception {
-        List<Person> persons = personService.selectAll();
-        System.out.println("success");
-        log.info("com.wenwen.persons:{}", persons);
-        return persons;
-    }
-
     @RequestMapping(path = "/activate", method = RequestMethod.GET)
     public void activate(String personName, String activateCode) {
+        log.info(personName + "激活账号");
+        personService.activate(personName,activateCode);
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/sendActivateEmail", method = RequestMethod.POST)
+    public Result sendActivateEmail(@RequestBody Person param) {
+        Person person = personService.getByNameOrEmail(param.getPersonName(), param.getPersonName());
+        Result result = new Result(Result.ResultEnums.SUCCESS);
+        try {
+            sendEmailService.sendActivateEmail(person);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        result.setRsMsg("请查看邮箱激活账户！");
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/sendChangePassword", method = RequestMethod.POST)
+    public Result sendChangePasswordEmail(@RequestBody String param) {
+        Result result = new Result(Result.ResultEnums.SUCCESS);
+        personService.sendChangePasswordEmail(param);
+        result.setRsMsg("请查看邮箱更改账号密码！");
+        return result;
+    }
+
+    @RequestMapping(path = "/changePassword", method = RequestMethod.GET)
+    public void changePassword(String personName, String activateCode) {
         log.info(personName + "激活账号");
         personService.activate(personName,activateCode);
     }

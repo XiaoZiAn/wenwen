@@ -56,8 +56,8 @@
     <div class="row">
         <div class="col-md-12 text-center">
             <ul class="menu">
-                <li class="active"><a href="/person/signUp">Sign Up</a></li>
-                <li><a href="/person/signIn">Sign In</a></li>
+                <li class="active"><a href="/person/signup">Sign Up</a></li>
+                <li><a href="/person/signin">Sign In</a></li>
             </ul>
         </div>
     </div>
@@ -80,7 +80,7 @@
                     <label for="remember"><input type="checkbox" id="remember">Remember Me</label>
                 </div>
                 <div class="form-group">
-                    <p>Not registered? <a href="/person/signUp">Sign Up</a> | <a href="/views/forget.jsp">Forgot
+                    <p>Not registered? <a href="/person/signup">Sign Up</a> | <a href="/views/forget.jsp">Forgot
                         Password?</a></p>
                 </div>
                 <div class="form-group">
@@ -121,6 +121,9 @@
                 success: function (data) {
                     if (data.rsCode == '1000') {
                         window.location.href = "/views/index.jsp";
+                    }
+                    if (data.rsCode == '1003') {
+                        window.location.href = "/views/activate.jsp";
                     }
                     alert(data.rsMsg);
                 },

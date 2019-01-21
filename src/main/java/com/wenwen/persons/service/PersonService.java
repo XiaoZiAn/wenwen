@@ -1,12 +1,7 @@
 package com.wenwen.persons.service;
 
 import com.wenwen.persons.enums.PersonStatus;
-import com.wenwen.system.dao.Email;
-import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.dao.Result;
-import com.wenwen.system.enums.EmailStatus;
-import com.wenwen.system.enums.EmailType;
-import com.wenwen.system.model.EorrorException;
 import com.wenwen.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -29,7 +24,7 @@ public class PersonService {
     private PersonMapper personMapper;
 
     @Autowired
-    private NewTableIdService newTableIdService;
+    private TableIdService tableIdService;
 
     @Autowired
     private EncryptService encryptService;
@@ -40,14 +35,11 @@ public class PersonService {
     @Autowired
     private DateToolsService dateToolsService;
 
-    @Autowired
-    private EmailService emailService;
-
     public Result insert(Person person) {
         Person val = getByNameOrEmail(person.getPersonName(), person.getEmail());
         Result<Person> result = new Result<Person>(Result.ResultEnums.SIGIN_ERROR);
         if (val == null) {
-            String personId = newTableIdService.getTableId("person", "personId", "pe");
+            String personId = tableIdService.getTableId("person", "personId", "pe");
             person.setPersonId(personId);
             String passworded = encryptService.encryptString(person.getPassword());
             person.setPassword(passworded);
@@ -77,10 +69,6 @@ public class PersonService {
         return personMapper.selectByPersonName(name);
     }
 
-    public List<Person> selectAll() {
-        return personMapper.selectAll();
-    }
-
     public Result<Person> check(Person val) {
         val.setEmail(val.getPersonName());// 用户可能用邮箱登录
         Result<Person> result = new Result<Person>(Result.ResultEnums.LOGON_ERROR);
@@ -88,7 +76,7 @@ public class PersonService {
         if (person == null) {
             result.setRsMsg("用户不存在！");
         } else if (PersonStatus.WAIT_ACTIVATED.code.equals(person.getStatus())) {
-            result.setRsMsg("您的账号未激活！");
+            result.setResultEnums(Result.ResultEnums.WAIT_ACTIVATED);
         } else if (StringUtils.isNotBlank(dateToolsService.nowToUnbLockTime(person.getUnbLockTime()))) {
             result.setResultEnums(Result.ResultEnums.SEALED);
             result.setRsMsg("您的账号已被封！");
@@ -111,6 +99,17 @@ public class PersonService {
             personMapper.updateStatus(PersonStatus.ACTIVATED.code, PersonStatus.WAIT_ACTIVATED.code);
         } else {
             log.info(val1 + "账号激活失败！");
+        }
+    }
+
+    public void sendChangePasswordEmail(String val){
+        Person person = getByNameOrEmail(val, val);
+        person.setPasswordCode(UUID.randomUUID().toString());
+        person.setPasswordCodeLastTime(DateToolsService.getHalfHourTime());
+        try {
+            sendEmailService.sendChangePasswordEmail(person);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

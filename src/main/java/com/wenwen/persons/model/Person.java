@@ -33,4 +33,8 @@ public class Person {
     private long sealedTime;// 需被封时间
 
     private String activateCode;// 激活标识
+
+    private String passwordCode;// 更改密码标识
+
+    private String passwordCodeLastTime;// 更改密码最后时间
 }

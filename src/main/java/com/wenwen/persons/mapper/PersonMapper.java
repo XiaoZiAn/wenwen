@@ -17,8 +17,6 @@ public interface PersonMapper {
 
     Person selectByPersonName(@Param("personName") String personName);
 
-    List<Person> selectAll();
-
     Person getByNameOrEmail(@Param("personName") String personName, @Param("email") String email);
 
     void updateStatus(@Param("newStatus") String newStatus, @Param("oldStatus") String oldStatus);

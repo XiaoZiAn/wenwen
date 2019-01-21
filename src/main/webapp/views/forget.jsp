@@ -61,21 +61,24 @@
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <!-- Start Sign In Form -->
-            <form action="#" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+            <form class="fh5co-form animate-box" data-animate-effect="fadeIn">
                 <h2>Forgot Password</h2>
                 <div class="form-group">
-                    <label for="email" class="sr-only">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Email" autocomplete="off">
+                    <label for="email" class="sr-only">UserName/Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="UserName/Email" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <p><a href="/person/signIn">Sign In</a> or <a href="/person/signUp">Sign Up</a></p>
+                    <label for="email" class="sr-only">UserName/Email</label>
+                    <input type="text" class="form-control" id="code" placeholder="code" autocomplete="off">
+                    <input type="button" id="sendpasswordcode" value="send Code" class="btn btn-primary">
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Send Email" class="btn btn-primary">
+                    <p><a href="/person/signin">Sign In</a> or <a href="/person/signup">Sign Up</a></p>
+                </div>
+                <div class="form-group">
+                    <input type="button" id="sendchangepassword" value="Sure" class="btn btn-primary">
                 </div>
             </form>
-            <!-- END Sign In Form -->
         </div>
     </div>
 </div>
@@ -90,6 +93,32 @@
 <script src="/js/jquery.waypoints.min.js"></script>
 <!-- Main JS -->
 <script src="/js/main.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sendchangepassword").click(function () {
+            var name = $("#name").val();
+            var param = {
+                personName: name
+            };//拼装成json格式
 
+            $.ajax({
+                type: "POST",
+                url: "/person/sendChangePassword",
+                data: JSON.stringify(param),
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.rsCode == '00000') {
+                        window.location.href = "/views/signin.jsp";
+                    }
+                    alert(data.rsMsg);
+                },
+                error: function (data) {
+                    alert("错误：" + data.rsCode);
+                }
+            });
+        })
+    })
+</script>
 </body>
 </html>
