@@ -79,7 +79,7 @@ create table wenwen.person
 	comment '用户表';
 	
 	
-create table wenwen.table_maxid
+create table wenwen.tablemaxid
 (
     id         int auto_increment
     comment '序号'
