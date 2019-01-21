@@ -93,7 +93,7 @@
                 <div class="form-group">
                     <label for="remember"><input type="checkbox" id="remember">Remember Me</label>
                 </div>
-                <div class="form-group">i
+                <div class="form-group">
                     <p>Already registered? <a href="/person/signin">Sign In</a></p>
                 </div>
                 <div class="form-group">

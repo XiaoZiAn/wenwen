@@ -45,6 +45,7 @@
         p.createtime,
         p.password,
         p.status,
-        p.sealedDays
+        p.sealedDays,
+        p.activateCode
     </sql>
 </mapper>
