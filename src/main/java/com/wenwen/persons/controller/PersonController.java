@@ -1,7 +1,6 @@
 package com.wenwen.persons.controller;
 
 import com.wenwen.system.dao.Result;
-import com.wenwen.system.service.NewTableIdService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +23,6 @@ import java.util.List;
 public class PersonController {
     @Autowired
     private PersonService personService;
-    @Autowired
-    private NewTableIdService newTableIdService;
 
     @RequestMapping("/signUp")
     public String signUp() {

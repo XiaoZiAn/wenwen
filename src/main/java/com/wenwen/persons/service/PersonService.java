@@ -1,12 +1,7 @@
 package com.wenwen.persons.service;
 
 import com.wenwen.persons.enums.PersonStatus;
-import com.wenwen.system.dao.Email;
-import com.wenwen.system.dao.EmailTemplate;
 import com.wenwen.system.dao.Result;
-import com.wenwen.system.enums.EmailStatus;
-import com.wenwen.system.enums.EmailType;
-import com.wenwen.system.model.EorrorException;
 import com.wenwen.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -29,7 +24,7 @@ public class PersonService {
     private PersonMapper personMapper;
 
     @Autowired
-    private NewTableIdService newTableIdService;
+    private TableIdService tableIdService;
 
     @Autowired
     private EncryptService encryptService;
@@ -40,14 +35,11 @@ public class PersonService {
     @Autowired
     private DateToolsService dateToolsService;
 
-    @Autowired
-    private EmailService emailService;
-
     public Result insert(Person person) {
         Person val = getByNameOrEmail(person.getPersonName(), person.getEmail());
         Result<Person> result = new Result<Person>(Result.ResultEnums.SIGIN_ERROR);
         if (val == null) {
-            String personId = newTableIdService.getTableId("person", "personId", "pe");
+            String personId = tableIdService.getTableId("person", "personId", "pe");
             person.setPersonId(personId);
             String passworded = encryptService.encryptString(person.getPassword());
             person.setPassword(passworded);
