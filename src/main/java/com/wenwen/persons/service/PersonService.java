@@ -121,6 +121,7 @@ public class PersonService {
         if (StringUtils.isNotBlank(passwordCode) && person.getPasswordCode().equals(passwordCode)) {
             if (person.getPasswordCodeLastTime().compareTo(nowTime) > 0) {
                 result.setResultEnums(Result.ResultEnums.SUCCESS);
+                result.setData(person.getPersonName());
             } else {
                 result.setResultEnums(Result.ResultEnums.CODE_LOSE);
             }

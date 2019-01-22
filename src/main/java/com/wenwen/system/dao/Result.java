@@ -56,6 +56,10 @@ public class Result<T> implements Serializable {
         return rsCode;
     }
 
+    public T getData(){
+        return data;
+    }
+
     public enum ResultEnums {
         SUCCESS("操作成功", "00000"),
         Erroe("操作失败","00001"),

@@ -73,7 +73,7 @@
                 <h2>Change Password</h2>
                 <div class="form-group">
                     <label for="name" class="sr-only">Username/Email</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Username/Email"
+                    <input type="hidden" class="form-control" id="name" name="name" placeholder="Username/Email"
                            autocomplete="off">
                 </div>
                 <div class="form-group">

@@ -132,7 +132,7 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.rsCode == '00000') {
-                        window.location.href = "/views/changepassword.jsp";
+                        window.location.href = "/views/changepassword.jsp?name=" + data.data;
                     }else {
                         alert(data.rsMsg);
                     }
