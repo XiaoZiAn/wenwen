@@ -88,7 +88,6 @@ public class PersonController {
     @ResponseBody
     @RequestMapping(path = "/checkCode", method = RequestMethod.POST)
     public Result checkCode(@RequestBody Person person) {
-        log.info(person.getPersonName() + "激活账号");
         Result result = personService.checkPasswordCode(person.getPersonName(), person.getPasswordCode());
         return result;
     }

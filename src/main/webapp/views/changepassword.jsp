@@ -53,8 +53,11 @@
     <!--[if lt IE 9]>
     <script src="/js/respond.min.js"></script>
     <![endif]-->
-
+    <%
+        String name = request.getParameter("name");
+    %>
 </head>
+
 <body class="style-2">
 
 <div class="container">
@@ -73,7 +76,7 @@
                 <h2>Change Password</h2>
                 <div class="form-group">
                     <label for="name" class="sr-only">Username/Email</label>
-                    <input type="hidden" class="form-control" id="name" name="name" placeholder="Username/Email"
+                    <input type="hidden" class="form-control" id="name" name="name" value=<%=name%>
                            autocomplete="off">
                 </div>
                 <div class="form-group">
