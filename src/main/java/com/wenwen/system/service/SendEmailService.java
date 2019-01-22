@@ -38,6 +38,18 @@ public class SendEmailService {
 
     @Autowired
     private CreateUrlService createUrlService;
+    
+    public void sendEmailBefor(Email email, Person person) throws EorrorException {
+        try {
+            sendEmail(email);
+        } catch (Exception e) {
+            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
+            log.info(person.getEmail() + " " + email.getEmailTitle() + "发送失败");
+            e.printStackTrace();
+            throw new EorrorException(person.getEmail() + " " + email.getEmailTitle() + "发送失败");
+        }
+        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
+    }
 
     /**
      ** 邮件单发（自由编辑短信，并发送，适用于私信）
@@ -87,20 +99,12 @@ public class SendEmailService {
         email.setEmailContent(content);
         email.setIsBatch("0");
         emailService.insertEmail(email);
-        try {
-            sendEmail(email);
-        } catch (Exception e) {
-            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
-            log.info(person.getEmail() + "的账户激活邮件发送失败");
-            e.printStackTrace();
-            throw new EorrorException(person.getEmail() + "账户激活邮件发送失败");
-        }
-        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
+        sendEmailBefor(email,person);
     }
 
-    public void sendChangePasswordEmail(Person person) throws Exception{
+    public void sendChangePasswordEmail(Person person) throws Exception {
         EmailTemplate emailTemplate = emailTemplateService.getEmailTemplate(EmailType.CHANGEPASSWORD_EMAIL.code);
-        String content = emailTemplate.getEmailContent().replace("[&url&]", createUrlService.getChangePasswordUrl(person));
+        String content = emailTemplate.getEmailContent().replace("[&code&]", person.getPasswordCode());
         Email email = new Email();
         email.setSendDate(DateToolsService.getNowDate());
         email.setSendTo(person.getEmail());
@@ -109,13 +113,6 @@ public class SendEmailService {
         email.setEmailContent(content);
         email.setIsBatch("0");
         emailService.insertEmail(email);
-        try {
-            sendEmail(email);
-        } catch (Exception e) {
-            emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_faild.code, EmailStatus.wait_send.code);
-            log.info(person.getEmail() + "的更改账号密码邮件发送失败");
-            e.printStackTrace();
-            throw new EorrorException(person.getEmail() + "更改账号密码邮件发送失败");
-        }
-        emailService.updateStatus(email.getSendTo(), email.getEmailType(), EmailStatus.send_success.code, EmailStatus.wait_send.code);
-    }}
+        sendEmailBefor(email,person);
+    }
+}

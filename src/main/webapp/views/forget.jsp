@@ -64,11 +64,11 @@
             <form class="fh5co-form animate-box" data-animate-effect="fadeIn">
                 <h2>Forgot Password</h2>
                 <div class="form-group">
-                    <label for="email" class="sr-only">UserName/Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="UserName/Email" autocomplete="off">
+                    <label for="name" class="sr-only">UserName/Email</label>
+                    <input type="text" class="form-control" id="name" placeholder="UserName/Email" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label for="email" class="sr-only">UserName/Email</label>
+                    <label for="code" class="sr-only">UserName/Email</label>
                     <input type="text" class="form-control" id="code" placeholder="code" autocomplete="off">
                     <input type="button" id="sendpasswordcode" value="send Code" class="btn btn-primary">
                 </div>
@@ -76,7 +76,7 @@
                     <p><a href="/person/signin">Sign In</a> or <a href="/person/signup">Sign Up</a></p>
                 </div>
                 <div class="form-group">
-                    <input type="button" id="sendchangepassword" value="Sure" class="btn btn-primary">
+                    <input type="button" id="checkcode" value="Sure" class="btn btn-primary">
                 </div>
             </form>
         </div>
@@ -95,7 +95,7 @@
 <script src="/js/main.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#sendchangepassword").click(function () {
+        $("#sendpasswordcode").click(function () {
             var name = $("#name").val();
             var param = {
                 personName: name
@@ -103,15 +103,39 @@
 
             $.ajax({
                 type: "POST",
-                url: "/person/sendChangePassword",
+                url: "/person/sendPasswordCode",
+                data: JSON.stringify(param),
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    alert(data.rsMsg);
+                },
+                error: function (data) {
+                    alert("错误：" + data.rsCode);
+                }
+            });
+        });
+
+        $("#checkcode").click(function () {
+            var name = $("#name").val();
+            var code = $("#code").val();
+            var param = {
+                personName: name,
+                passwordCode: code
+            };//拼装成json格式
+
+            $.ajax({
+                type: "POST",
+                url: "/person/checkCode",
                 data: JSON.stringify(param),
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
                     if (data.rsCode == '00000') {
-                        window.location.href = "/views/signin.jsp";
+                        window.location.href = "/views/changepassword.jsp?name=" + data.data;
+                    }else {
+                        alert(data.rsMsg);
                     }
-                    alert(data.rsMsg);
                 },
                 error: function (data) {
                     alert("错误：" + data.rsCode);

@@ -20,4 +20,8 @@ public interface PersonMapper {
     Person getByNameOrEmail(@Param("personName") String personName, @Param("email") String email);
 
     void updateStatus(@Param("newStatus") String newStatus, @Param("oldStatus") String oldStatus);
+
+    void updatePassword(@Param("personName") String personName, @Param("newPassword") String newPassword);
+
+    void updatePasswordCodeAndLastTime(@Param("person") Person person);
 }

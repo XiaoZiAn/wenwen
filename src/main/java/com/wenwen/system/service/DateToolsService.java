@@ -25,10 +25,14 @@ public class DateToolsService {
         return pattern.format(localDateTime);
     }
 
-    public static String getHalfHourTime(){
+    public static String getNowTime(){
         LocalDateTime localDateTime = LocalDateTime.now();
-        localDateTime.plusMinutes(30);
-        return pattern.format(localDateTime);
+        return pattern1.format(localDateTime);
+    }
+
+    public static String get10MinutsTime(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        return pattern1.format(localDateTime.plusMinutes(10));
     }
 
     public String nowToUnbLockTime(Date unbLockTime) {

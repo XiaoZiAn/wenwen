@@ -102,14 +102,53 @@ public class PersonService {
         }
     }
 
-    public void sendChangePasswordEmail(String val){
+    public void sendChangePasswordEmail(String val) {
         Person person = getByNameOrEmail(val, val);
-        person.setPasswordCode(UUID.randomUUID().toString());
-        person.setPasswordCodeLastTime(DateToolsService.getHalfHourTime());
+        person.setPasswordCode(CodeTools.newCode());
+        person.setPasswordCodeLastTime(DateToolsService.get10MinutsTime());
+        updatePasswordCodeAndLastTime(person);
         try {
             sendEmailService.sendChangePasswordEmail(person);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Result checkPasswordCode(String name, String passwordCode) {
+        Result result = new Result();
+        Person person = getByNameOrEmail(name, name);
+        String nowTime = DateToolsService.getNowTime();
+        if (StringUtils.isNotBlank(passwordCode) && person.getPasswordCode().equals(passwordCode)) {
+            if (person.getPasswordCodeLastTime().compareTo(nowTime) > 0) {
+                result.setResultEnums(Result.ResultEnums.SUCCESS);
+                result.setData(person.getPersonName());
+            } else {
+                result.setResultEnums(Result.ResultEnums.CODE_LOSE);
+            }
+        } else {
+            result.setResultEnums(Result.ResultEnums.CODE_ERROR);
+        }
+        return result;
+    }
+
+    public Result changePassword(Person val) {
+        Result result = new Result();
+        Person person = getByNameOrEmail(val.getPersonName(), val.getPersonName());
+        String nowTime = DateToolsService.getNowTime();
+        if (StringUtils.isNotBlank(person.getPasswordCodeLastTime()) && (person.getPasswordCodeLastTime().compareTo(nowTime) > 0)) {
+            updatePassword(person.getPersonName(), encryptService.encryptString(val.getPassword()));
+            result.setResultEnums(Result.ResultEnums.SUCCESS);
+        } else {
+            result.setResultEnums(Result.ResultEnums.Erroe);
+        }
+        return result;
+    }
+
+    private void updatePassword(String name, String newpassword) {
+        personMapper.updatePassword(name, newpassword);
+    }
+
+    private void updatePasswordCodeAndLastTime (Person person){
+        personMapper.updatePasswordCodeAndLastTime(person);
     }
 }

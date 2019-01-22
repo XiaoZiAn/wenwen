@@ -95,3 +95,5 @@ create table wenwen.tablemaxid
 
 insert into wenwen.emailtemplate (id, emailType, emailContent, status, emailTitle) VALUES (1, 'ActivateEmail', '您好：<br><h1>点击<a href=''[&url&]''>此处</a>激活账户<h1><br><br><br>此邮件由系统发出，请勿回复。<br><h2>文文网</h2>
 ', '1', '账户激活邮件');
+INSERT INTO wenwen.emailtemplate (id, emailType, emailContent, status, emailTitle) VALUES (2, 'ChangePasswordEmail', '您好：<br><h1>验证码：[&code&]<h1><br><br><br>此邮件由系统发出，请勿回复。<br><h2>文文网</h2>
+', '1', '账号密码修改邮件');
