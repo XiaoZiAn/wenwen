@@ -18,8 +18,4 @@ public class CreateUrlService {
     public String getActivateUrl(Person person) {
         return url + "/person/activate?personName=" + person.getPersonName() + "&activateCode=" + person.getActivateCode();
     }
-
-    public String getChangePasswordUrl(Person person){
-        return url + "/person/changePassword?personName=" + person.getPersonName() + "&personwordCode=" + person.getActivateCode();
-    }
 }

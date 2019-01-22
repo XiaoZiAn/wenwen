@@ -104,12 +104,28 @@ public class PersonService {
 
     public void sendChangePasswordEmail(String val){
         Person person = getByNameOrEmail(val, val);
-        person.setPasswordCode(UUID.randomUUID().toString());
-        person.setPasswordCodeLastTime(DateToolsService.getHalfHourTime());
+        person.setPasswordCode(CodeTools.newCode());
+        person.setPasswordCodeLastTime(DateToolsService.get5MinutsTime());
         try {
             sendEmailService.sendChangePasswordEmail(person);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Result checkPasswordCode(String name, String passwordCode) {
+        Result result = new Result();
+        Person person = getByNameOrEmail(name, name);
+        String nowTime = DateToolsService.getNowTime();
+        if (person.getPasswordCode().equals(passwordCode)) {
+            if (person.getPasswordCodeLastTime().compareTo(nowTime) > 0) {
+                result.setResultEnums(Result.ResultEnums.SUCCESS);
+            } else {
+                result.setResultEnums(Result.ResultEnums.CODE_LOSE);
+            }
+        } else {
+            result.setResultEnums(Result.ResultEnums.CODE_ERROR);
+        }
+        return result;
     }
 }

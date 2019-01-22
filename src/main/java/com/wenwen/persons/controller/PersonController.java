@@ -81,13 +81,15 @@ public class PersonController {
     public Result sendChangePasswordEmail(@RequestBody String param) {
         Result result = new Result(Result.ResultEnums.SUCCESS);
         personService.sendChangePasswordEmail(param);
-        result.setRsMsg("请查看邮箱更改账号密码！");
+        result.setRsMsg("请查看邮箱接收验证码！");
         return result;
     }
 
-    @RequestMapping(path = "/changePassword", method = RequestMethod.GET)
-    public void changePassword(String personName, String activateCode) {
+    @ResponseBody
+    @RequestMapping(path = "/checkCode", method = RequestMethod.POST)
+    public Result checkCode(@RequestBody String personName, String passwordCode) {
         log.info(personName + "激活账号");
-        personService.activate(personName,activateCode);
+        Result result = personService.checkPasswordCode(personName,passwordCode);
+        return result;
     }
 }

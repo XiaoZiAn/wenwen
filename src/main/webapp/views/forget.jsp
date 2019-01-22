@@ -76,7 +76,7 @@
                     <p><a href="/person/signin">Sign In</a> or <a href="/person/signup">Sign Up</a></p>
                 </div>
                 <div class="form-group">
-                    <input type="button" id="sendchangepassword" value="Sure" class="btn btn-primary">
+                    <input type="button" id="checkcode" value="Sure" class="btn btn-primary">
                 </div>
             </form>
         </div>
@@ -108,10 +108,34 @@
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.rsCode == '00000') {
-                        window.location.href = "/views/signin.jsp";
-                    }
                     alert(data.rsMsg);
+                },
+                error: function (data) {
+                    alert("错误：" + data.rsCode);
+                }
+            });
+        });
+
+        $("#checkcode").click(function () {
+            var name = $("#name").val();
+            var code = $("#code").val()
+            var param = {
+                personName: name,
+                passwordCode: code
+            };//拼装成json格式
+
+            $.ajax({
+                type: "POST",
+                url: "/person/checkCode",
+                data: JSON.stringify(param),
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.rsCode == '00000') {
+                        window.location.href = "/views/changepassword.jsp";
+                    }else {
+                        alert(data.rsMsg);
+                    }
                 },
                 error: function (data) {
                     alert("错误：" + data.rsCode);
