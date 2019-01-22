@@ -42,7 +42,7 @@ public class PersonController {
     @RequestMapping(path = "/addPerson", method = RequestMethod.POST)
     public Result addPerson(@RequestBody Person person) {
         Result result = personService.insert(person);
-        if(!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())){
+        if (!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())) {
             log.info("person name:{}注册失败", person.getPersonName());
         }
         return result;
@@ -59,7 +59,7 @@ public class PersonController {
     @RequestMapping(path = "/activate", method = RequestMethod.GET)
     public void activate(String personName, String activateCode) {
         log.info(personName + "激活账号");
-        personService.activate(personName,activateCode);
+        personService.activate(personName, activateCode);
     }
 
     @ResponseBody
@@ -77,19 +77,29 @@ public class PersonController {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/sendChangePassword", method = RequestMethod.POST)
-    public Result sendChangePasswordEmail(@RequestBody String param) {
+    @RequestMapping(path = "/sendPasswordCode", method = RequestMethod.POST)
+    public Result sendChangePasswordEmail(@RequestBody Person person) {
         Result result = new Result(Result.ResultEnums.SUCCESS);
-        personService.sendChangePasswordEmail(param);
+        personService.sendChangePasswordEmail(person.getPersonName());
         result.setRsMsg("请查看邮箱接收验证码！");
         return result;
     }
 
     @ResponseBody
     @RequestMapping(path = "/checkCode", method = RequestMethod.POST)
-    public Result checkCode(@RequestBody String personName, String passwordCode) {
-        log.info(personName + "激活账号");
-        Result result = personService.checkPasswordCode(personName,passwordCode);
+    public Result checkCode(@RequestBody Person person) {
+        log.info(person.getPersonName() + "激活账号");
+        Result result = personService.checkPasswordCode(person.getPersonName(), person.getPasswordCode());
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
+    public Result changePassword(@RequestBody Person person) {
+        Result result = personService.changePassword(person);
+        if (!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())) {
+            log.info("person name:{}注册失败", person.getPersonName());
+        }
         return result;
     }
 }

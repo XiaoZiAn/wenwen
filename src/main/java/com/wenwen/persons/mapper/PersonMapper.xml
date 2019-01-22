@@ -36,6 +36,18 @@
         update person p set p.status = #{newStatus,jdbcType=VARCHAR} where p.status = #{oldStatus,jdbcType=VARCHAR}
     </update>
 
+    <update id="updatePassword">
+        update person p set p.password = #{newPassword,jdbcType=VARCHAR} where p.personName = #{personName,jdbcType=VARCHAR} and p.passwordCode is not null
+    </update>
+
+    <update id="updatePasswordCodeAndLastTime" parameterType="com.wenwen.persons.model.Person">
+        update person p
+            set
+            p.passwordCode = #{person.passwordCode,jdbcType=VARCHAR},
+            p.passwordCodeLastTime = #{person.passwordCodeLastTime,jdbcType=VARCHAR}
+        where p.personName = #{person.personName,jdbcType=VARCHAR}
+    </update>
+
     <sql id="Person_List">
         p.personId,
         p.personName,
@@ -46,6 +58,8 @@
         p.password,
         p.status,
         p.sealedDays,
-        p.activateCode
+        p.activateCode,
+        p.passwordCode,
+        p.passwordCodeLastTime
     </sql>
 </mapper>

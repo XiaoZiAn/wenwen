@@ -30,10 +30,9 @@ public class DateToolsService {
         return pattern1.format(localDateTime);
     }
 
-    public static String get5MinutsTime(){
+    public static String get10MinutsTime(){
         LocalDateTime localDateTime = LocalDateTime.now();
-        localDateTime.plusMinutes(5);
-        return pattern1.format(localDateTime);
+        return pattern1.format(localDateTime.plusMinutes(10));
     }
 
     public String nowToUnbLockTime(Date unbLockTime) {
