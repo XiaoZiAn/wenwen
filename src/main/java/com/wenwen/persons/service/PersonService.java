@@ -47,7 +47,7 @@ public class PersonService {
             person.setActivateCode(activateCode);
             if (personMapper.insert(person) > 0) {
                 result.setResultEnums(Result.ResultEnums.SIGIN_SUCCESS);
-                result.setRsMsg("注册成功，请查看邮箱激活账号！");
+                result.setRsMsg("注册成功，请查看邮箱激活账号！(若十天内未激活账户，需重新注册！)");
                 try {
                     sendEmailService.sendActivateEmail(person);
                 } catch (Exception e) {
