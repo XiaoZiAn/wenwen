@@ -55,6 +55,7 @@
     <![endif]-->
     <%
         String name = request.getParameter("name");
+        String code = request.getParameter("code");
     %>
 </head>
 
