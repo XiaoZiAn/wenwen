@@ -74,7 +74,7 @@ public class SendEmailService {
         // 创建邮件
         Message message = new MimeMessage(session);
         // 设置收件人地址
-        message.setFrom(new InternetAddress(emailAddress));
+        message.setFrom(new InternetAddress(emailAddress,"文文网"));
         // 抄送
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(email.getSendTo()));
         // 设置邮件的主体
