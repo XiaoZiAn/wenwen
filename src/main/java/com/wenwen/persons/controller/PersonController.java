@@ -88,16 +88,15 @@ public class PersonController {
     @ResponseBody
     @RequestMapping(path = "/checkCode", method = RequestMethod.POST)
     public Result checkCode(@RequestBody Person person) {
-        Result result = personService.checkPasswordCode(person.getPersonName(), person.getPasswordCode());
-        return result;
+        return personService.checkPasswordCode(person.getPersonName(), person.getPasswordCode());
     }
 
     @ResponseBody
     @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
     public Result changePassword(@RequestBody Person person) {
         Result result = personService.changePassword(person);
-        if (!Result.ResultEnums.SIGIN_SUCCESS.rsCode.equals(result.getRsCode())) {
-            log.info("person name:{}注册失败", person.getPersonName());
+        if (!Result.ResultEnums.Erroe.rsCode.equals(result.getRsCode())) {
+            log.info("person name:{}更改密码失败", person.getPersonName());
         }
         return result;
     }

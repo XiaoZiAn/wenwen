@@ -75,9 +75,12 @@
             <form class="fh5co-form animate-box" data-animate-effect="fadeInLeft">
                 <h2>Change Password</h2>
                 <div class="form-group">
-                    <label for="name" class="sr-only">Username/Email</label>
                     <input type="hidden" class="form-control" id="name" name="name" value=<%=name%>
                            autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="passwordCode" name="passwordCode" value=<%=passwordCode%>
+                            autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="password" class="sr-only">Password</label>
@@ -111,9 +114,11 @@
     $(document).ready(function () {
         $("#changepassword").click(function () {
             var name = $("#name").val();
+            var passwordCode = $("#passwordCode").val();
             var password = $("#password").val();
             var person = {
                 personName: name,
+                passwordCode : passwordCode,
                 password: password
             };//拼装成json格式
 

@@ -114,14 +114,14 @@ public class PersonService {
         }
     }
 
-    public Result checkPasswordCode(String name, String passwordCode) {
+    public Result<Person> checkPasswordCode(String name, String passwordCode) {
         Result result = new Result();
         Person person = getByNameOrEmail(name, name);
         String nowTime = DateToolsService.getNowTime();
         if (StringUtils.isNotBlank(passwordCode) && person.getPasswordCode().equals(passwordCode)) {
             if (person.getPasswordCodeLastTime().compareTo(nowTime) > 0) {
                 result.setResultEnums(Result.ResultEnums.SUCCESS);
-                result.setData(person.getPersonName());
+                result.setData(person);
             } else {
                 result.setResultEnums(Result.ResultEnums.CODE_LOSE);
             }
@@ -135,10 +135,12 @@ public class PersonService {
         Result result = new Result();
         Person person = getByNameOrEmail(val.getPersonName(), val.getPersonName());
         String nowTime = DateToolsService.getNowTime();
-        if (StringUtils.isNotBlank(person.getPasswordCodeLastTime()) && (person.getPasswordCodeLastTime().compareTo(nowTime) > 0)) {
+        if (StringUtils.isNotBlank(person.getPasswordCodeLastTime()) && StringUtils.isNotBlank(val.getPasswordCode()) && val.getPasswordCode().equals(person.getPasswordCode())
+                && (person.getPasswordCodeLastTime().compareTo(nowTime) > 0)) {
             updatePassword(person.getPersonName(), encryptService.encryptString(val.getPassword()));
             result.setResultEnums(Result.ResultEnums.SUCCESS);
         } else {
+            result.setRsMsg("系统错误");
             result.setResultEnums(Result.ResultEnums.Erroe);
         }
         return result;
@@ -148,7 +150,7 @@ public class PersonService {
         personMapper.updatePassword(name, newpassword);
     }
 
-    private void updatePasswordCodeAndLastTime (Person person){
+    private void updatePasswordCodeAndLastTime(Person person) {
         personMapper.updatePasswordCodeAndLastTime(person);
     }
 }
